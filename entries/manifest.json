@@ -1,0 +1,25 @@
+{
+ "entries": [
+  {
+   "html": "entry-1.html",
+   "width": 1600,
+   "height": 1200,
+   "scale": 2,
+   "title": "Watch, Pause, Dig Deeper, Resume: documentary UX flow",
+   "description": "A single interaction model: Watch, Pause, Dig deeper, Resume. The documentary stays the spine of the page. Era and topic markers sit on the scrub bar and an era rail under the video follows playback. When the film reaches a marker, a small Learn more chip slides in with an 8-second countdown; the film never interrupts itself. One tap auto-pauses, docks the film into a persistent mini-player at the top and opens a bottom sheet: a 3-line summary, key evidence, then Places / People / Primary sources with a map. Depth is a Summary > Explore > Sources control, and every place or person carries a timestamp that jumps the film back to the matching shot. A fixed Resume at 4:32 button returns the viewer to the exact frame. A Chapters sheet shows what has been watched and read per era, with an auto-pause toggle for viewers who prefer no chips. Grayscale wireframes at 390x844 (Inter, one orange accent for the active state) following your example, with a state-flow diagram, interaction rules and gesture map. Delivered: this annotated flow board as PNG and PDF, five screens as 2x PNG, and a clickable HTML prototype that runs the pause/read/resume loop on a phone. Revisions welcome.",
+   "pdf": true
+  },
+  {
+   "html": "entry-2.html",
+   "width": 1600,
+   "height": 1200,
+   "scale": 2,
+   "detail": "entry-2-detail.html",
+   "detail_width": 1600,
+   "detail_height": 2000,
+   "title": "Working tap-through prototype: Watch, Pause, Read",
+   "description": "Entry 2 turns the flow from my first entry (Watch, Pause, Dig deeper, Resume) into a working mobile prototype you can tap through on your phone, in any mobile browser, no install: {{LIVE_URL}} What to tap: the film plays (simulated, 2x speed); at 4:32 an orange Learn more chip slides in with an 8-second ring. Tap it, or any scrub-bar tick or topic row, and the film pauses, docks into a mini-player and a bottom sheet opens with Summary, Explore and Sources. Places and people carry timestamps that jump the film; Resume at 4:32 returns to the exact frame with a toast; the Chapters sheet (list icon in the player) shows progress per era and an auto-pause toggle. Wireframe fidelity, placeholder Nashik content, no real video. Full HTML/CSS/JS source: {{REPO_URL}} On award I can adapt it to your real city content and visual design.",
+   "pdf": false
+  }
+ ]
+}

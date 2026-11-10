@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>What to tap — working prototype walkthrough, entry 2</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f6f6f6;font-family:Inter,system-ui,sans-serif;color:#111;-webkit-font-smoothing:antialiased;overflow:hidden}
+.board{position:relative;overflow:hidden;background:#f6f6f6}
+.kick{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#777}
+em{font-style:normal;color:#F7993F}
+.ph{position:absolute;border:9px solid #1b1b1b;border-radius:46px;overflow:hidden;background:#fff;box-shadow:0 22px 50px rgba(0,0,0,.18)}
+.ph img{display:block;width:100%;height:auto}
+.qr{background:#fff;border:1.5px solid #d6d6d6;border-radius:16px;padding:12px}
+.qr svg{display:block;width:100%;height:100%}
+
+@page{size:1600px 2000px;margin:0}
+html,body,.board{width:1600px;height:2000px}
+.hd{position:absolute;left:44px;right:44px;top:44px;display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:18px;border-bottom:2px solid #111}
+.hd h1{font-size:44px;font-weight:800;letter-spacing:-.8px;line-height:1;margin-top:10px}
+.hd p{font-size:17px;color:#444;font-weight:500;margin-top:10px}
+.hd .url{text-align:right;font-size:13px;color:#555;font-weight:500;line-height:1.5;width:600px;flex:none}
+.hd .url b{display:block;font-size:14px;color:#111;font-weight:800;white-space:nowrap}
+.step{position:absolute;display:flex;gap:12px;align-items:flex-start}
+.step .num{width:34px;height:34px;border-radius:50%;background:#111;color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.step b{display:block;font-size:19px;font-weight:800;line-height:1.1;letter-spacing:-.2px}
+.step span{display:block;font-size:13.5px;color:#444;font-weight:500;line-height:1.4;margin-top:5px}
+.strip{position:absolute;left:44px;right:44px;top:1702px;border-top:2px solid #111;padding-top:16px}
+.strip .cells{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:12px}
+.f{background:#fff;border:1.5px solid #dcdcdc;border-radius:16px;padding:13px 14px 13px 17px;position:relative}
+.f:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:2px;background:#F7993F}
+.f b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.1px}
+.f span{display:block;font-size:12px;color:#444;line-height:1.4;margin-top:5px;font-weight:500}
+.foot{position:absolute;left:44px;right:44px;bottom:34px;border-top:2px solid #111;padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:40px;font-size:13.5px;color:#555;font-weight:500}
+.foot b{color:#111;font-weight:800;font-size:14.5px;white-space:nowrap}
+.foot span:last-child{text-align:right}
+</style></head><body><div class="board">
+<div class="hd"><div><div class="kick">Entry 2 · Working prototype · walkthrough</div><h1>What to tap</h1><p>Six steps, as the prototype plays them · real screens of the live prototype, not mockups · 390 × 844 · open the link on your phone and follow along</p></div>
+<div class="url"><b>https://gsayesh.github.io/fl-interactive-documentary-ux-design-2800294/</b>Works in any mobile browser, no install</div></div>
+<div class="step" style="left:44px;top:192px;width:474px"><span class="num">1</span><div><b>Watch</b><span>The film plays: time counter, scrub-bar ticks and the era rail follow it; subtitles run.</span></div></div>
+<div class="ph " style="left:130px;top:276px;width:302px;height:633px"><img src="../exports/state-watch.png" width="284" height="615" alt="watch"></div><div class="step" style="left:563px;top:192px;width:474px"><span class="num">2</span><div><b>Marker reached</b><span>At 4:32 a “Learn more” chip slides in with an 8-second ring. The film never stops by itself.</span></div></div>
+<div class="ph " style="left:649px;top:276px;width:302px;height:633px"><img src="../exports/state-chip.png" width="284" height="615" alt="chip"></div><div class="step" style="left:1082px;top:192px;width:474px"><span class="num">3</span><div><b>Tap the chip: pause &amp; read</b><span>The film docks into a mini-player; the sheet opens on a 3-line summary and key evidence.</span></div></div>
+<div class="ph " style="left:1168px;top:276px;width:302px;height:633px"><img src="../exports/state-read.png" width="284" height="615" alt="read"></div><div class="step" style="left:44px;top:945px;width:474px"><span class="num">4</span><div><b>Dig deeper</b><span>Explore: map, places and people, each with a ▶ timestamp that jumps the film to that shot.</span></div></div>
+<div class="ph " style="left:130px;top:1029px;width:302px;height:633px"><img src="../exports/state-explore.png" width="284" height="615" alt="explore"></div><div class="step" style="left:563px;top:945px;width:474px"><span class="num">5</span><div><b>Chapters</b><span>Tap ≡ in the player: watched / reading progress per era, jump anywhere, auto-pause toggle.</span></div></div>
+<div class="ph " style="left:649px;top:1029px;width:302px;height:633px"><img src="../exports/state-chapters.png" width="284" height="615" alt="chapters"></div><div class="step" style="left:1082px;top:945px;width:474px"><span class="num">6</span><div><b>Resume</b><span>“Resume at 4:32” returns to the exact frame and confirms with a toast; the topic counts as read.</span></div></div>
+<div class="ph " style="left:1168px;top:1029px;width:302px;height:633px"><img src="../exports/state-resume.png" width="284" height="615" alt="resume"></div>
+<div class="strip"><div class="kick">What is interactive</div><div class="cells"><div class="f"><b>Chip timer</b><span>8-second countdown ring; ignored chips leave on their own and nothing changes.</span></div><div class="f"><b>Auto-pause toggle</b><span>Off = no chips. Scrub ticks, topic rows and the chapters sheet still open every topic.</span></div><div class="f"><b>Timestamps jump the film</b><span>▶ 5:04 on a place or person seeks the documentary and shows a “Jumped to” toast.</span></div><div class="f"><b>Resume at the exact frame</b><span>One fixed primary button; the paused time is kept while you read and explore.</span></div><div class="f"><b>Chapters sheet</b><span>Watched · Watching · Jump per era, progress bars and read counts, from the ≡ icon.</span></div><div class="f"><b>Summary › Explore › Sources</b><span>Three depth levels in one segmented control; the breadcrumb always shows where you are.</span></div></div></div>
+<div class="foot"><span><b>https://gsayesh.github.io/fl-interactive-documentary-ux-design-2800294/</b></span><span>Works in any mobile browser, no install · placeholder content for Nashik; same system fits any city · wireframe fidelity, full HTML / CSS / JS source included</span></div>
+</div></body></html>

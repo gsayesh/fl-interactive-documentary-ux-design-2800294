@@ -1,0 +1,418 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>Nashik Through Time — tap-through prototype</title><meta name="description" content="Interactive documentary UX prototype: watch, pause at a marker, read a summary, explore places and sources, resume at the exact frame. Wireframe fidelity, placeholder content."><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:390px;height:844px;background:#fff;border-radius:46px;border:3px solid #1b1b1b;overflow:hidden;position:relative;font-family:Inter,system-ui,sans-serif;color:#111;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+.status{height:46px;flex:none;display:flex;justify-content:space-between;align-items:flex-end;padding:0 30px 8px;font-size:14px;font-weight:600}
+.status .ic{display:flex;gap:5px;align-items:center}
+.topbar{display:flex;gap:10px;padding:6px 16px 10px;flex:none}
+.city{background:#ececec;border-radius:14px;padding:0 14px;height:40px;display:flex;align-items:center;font-weight:700;font-size:16px;gap:8px;white-space:nowrap}
+.search{flex:1;background:#ececec;border-radius:14px;height:40px;display:flex;align-items:center;padding:0 14px;color:#7a7a7a;font-size:14px;gap:8px;white-space:nowrap}
+.video{margin:0 16px;height:216px;border-radius:18px;background:#555;position:relative;overflow:hidden;flex:none;color:#fff}
+.video svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.vtitle{position:absolute;left:16px;top:14px;font-size:19px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.bigplay{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:rgba(20,20,20,.85);display:flex;align-items:center;justify-content:center}
+.ctrls{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 11px;display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:500;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.ctrls .t{white-space:nowrap;letter-spacing:.2px}
+.scrub{flex:1;height:4px;background:rgba(255,255,255,.38);border-radius:2px;position:relative}
+.scrub .fill{height:100%;background:#fff;border-radius:2px}
+.scrub .mk{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #2b2b2b;transform:translateX(-50%)}
+.scrub .mk.cur{background:#F7993F;border-color:#fff;width:14px;height:14px;top:-5px;box-shadow:0 0 0 4px rgba(247,153,63,.4)}
+.scrub .tk{position:absolute;top:-2px;width:3px;height:8px;border-radius:2px;background:#F7993F;transform:translateX(-50%)}
+.scrub .head{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:#fff;transform:translateX(-50%)}
+.cc{border:1.5px solid #fff;border-radius:4px;font-size:9px;font-weight:700;padding:1px 4px}
+.chip{position:absolute;left:12px;bottom:48px;background:#fff;color:#111;border-radius:999px;padding:6px 14px 6px 6px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.chip .ring{width:28px;height:28px;flex:none}
+.chip small{display:block;font-size:10px;font-weight:500;color:#666}
+.rail{padding:16px 16px 0;flex:none;position:relative}
+.rail .line{position:absolute;left:36px;right:36px;top:24px;height:2.5px;background:#8a8a8a}
+.rail .nodes{display:flex;justify-content:space-between;position:relative}
+.rail .nd{display:flex;flex-direction:column;align-items:center;width:59px;gap:7px}
+.rail .dot{width:17px;height:17px;border-radius:50%;background:#fff;border:2.5px solid #666}
+.rail .nd.cur .dot{width:22px;height:22px;margin:-2.5px 0;border-color:#F7993F;background:#F7993F;box-shadow:0 0 0 3px #fff,0 0 0 5px #FFDDBE}
+.rail .lb{font-size:10.5px;color:#222;font-weight:500;white-space:nowrap}
+.rail .nd.cur .lb{background:#FFDDBE;border-radius:999px;padding:2px 6px;font-weight:700;margin-top:-2px}
+.rail .nd.done .dot{background:#8a8a8a;border-color:#8a8a8a}
+.hint{text-align:center;color:#8a8a8a;font-size:12px;font-weight:500;padding:8px 0 0}
+.sec{padding:14px 16px 0;flex:1;min-height:0}
+.sech{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.sech h3{font-size:15px;font-weight:700}
+.sech span{font-size:11.5px;color:#7a7a7a;font-weight:500}
+.topic{display:flex;align-items:center;gap:10px;height:50px;border-bottom:1px solid #e6e6e6;font-size:14px}
+.topic .ts{font-variant-numeric:tabular-nums;color:#555;font-size:12.5px;width:36px;font-weight:600}
+.topic .nm{flex:1;font-weight:500}
+.topic .bar{width:3px;height:30px;border-radius:2px;background:transparent;margin-left:-4px}
+.topic.now .bar{background:#F7993F}
+.topic.now .nm{font-weight:700}
+.topic .pill{font-size:10.5px;font-weight:700;background:#FFDDBE;padding:3px 8px;border-radius:999px}
+.topic .pill.read{background:#e6e6e6;color:#444}
+.topic .inf{width:26px;height:26px;border-radius:50%;border:1.5px solid #bdbdbd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#555}
+.upnext{margin-top:12px;background:#f3f3f3;border-radius:14px;padding:8px 10px 8px 8px;display:flex;align-items:center;gap:10px}
+.upnext .th{width:64px;height:42px;border-radius:8px;overflow:hidden;position:relative;flex:none;background:#777}
+.upnext .th svg{position:absolute;inset:0;width:100%;height:100%}
+.upnext .tx{flex:1;min-width:0}
+.upnext .tx small{display:block;font-size:10.5px;color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.upnext .tx b{display:block;font-size:13px;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upnext .tx span{display:block;font-size:11.5px;color:#555;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upnext .pv{font-size:11px;font-weight:700;border:1.5px solid #bbb;border-radius:999px;padding:5px 9px;background:#fff;white-space:nowrap}
+.nav{height:84px;flex:none;border-top:1px solid #e3e3e3;display:flex;padding:8px 12px 0;background:#fff}
+.nav div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:500;color:#333;padding:7px 0 4px;border-radius:14px}
+.nav div.on{background:#FFDDBE;font-weight:700}
+.home{position:absolute;bottom:9px;left:50%;width:134px;height:5px;background:#111;border-radius:3px;transform:translateX(-50%)}
+/* mini player + sheet */
+.mini{margin:4px 16px 0;height:74px;background:#1e1e1e;border-radius:16px;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 8px;color:#fff;flex:none}
+.mini .th{width:92px;height:58px;border-radius:10px;overflow:hidden;position:relative;flex:none;background:#555}
+.mini .th svg{position:absolute;inset:0;width:100%;height:100%}
+.mini .tx{flex:1;min-width:0}
+.mini .tx b{display:block;font-size:14px;font-weight:700}
+.mini .tx span{display:block;font-size:11.5px;color:#b5b5b5;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .pb{height:3px;background:#555;border-radius:2px;margin-top:7px;position:relative}
+.mini .pb i{position:absolute;left:0;top:0;height:100%;width:28.3%;background:#F7993F;border-radius:2px}
+.mini .play{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.sheet{margin-top:10px;background:#f3f3f3;border-radius:28px 28px 0 0;padding:8px 16px 0;flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.handle{width:44px;height:5px;background:#bdbdbd;border-radius:3px;margin:0 auto 10px}
+.crumb{font-size:12px;color:#7a7a7a;font-weight:500;display:flex;align-items:center;gap:6px}
+.crumb b{color:#333}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-top:4px}
+.sh h1{font-size:26px;font-weight:800;line-height:1.1;letter-spacing:-.3px}
+.sh p{font-size:13px;color:#555;margin-top:4px;font-weight:500}
+.tag{background:#FFDDBE;border-radius:999px;padding:5px 10px;font-size:11.5px;font-weight:700;white-space:nowrap;margin-top:4px}
+.seg{display:flex;background:#e2e2e2;border-radius:12px;padding:3px;margin-top:12px}
+.seg div{flex:1;text-align:center;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:10px;color:#666}
+.seg div.on{background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seg div.on i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#F7993F;margin-right:5px;vertical-align:1px}
+.para{font-size:13.5px;line-height:1.5;color:#333;margin-top:12px}
+.para a{color:#111;font-weight:700;border-bottom:2px solid #F7993F;text-decoration:none}
+.lbl{font-size:14px;font-weight:700;margin-top:14px}
+.ev{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.ev span{background:#e4e4e4;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:500}
+.acc{background:#fff;border:1.5px solid #d9d9d9;border-radius:14px;padding:0 14px;height:52px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;margin-top:8px}
+.acc .sp{flex:1}
+.acc .cnt{font-size:11.5px;color:#7a7a7a;font-weight:600}
+.accopen{background:#fff;border:1.5px solid #d9d9d9;border-radius:14px;margin-top:8px;overflow:hidden}
+.accopen .hd{padding:0 14px;height:48px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;border-bottom:1px solid #ececec}
+.accopen .hd .sp{flex:1}
+.place{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #f0f0f0;font-size:13px}
+.place:last-child{border-bottom:0}
+.place .nm{flex:1;min-width:0}
+.place .nm b{display:block;font-weight:600}
+.place .nm span{font-size:11.5px;color:#777}
+.jump{display:inline-flex;align-items:center;gap:4px;border:1.5px solid #ccc;border-radius:999px;padding:4px 8px 4px 6px;font-size:11px;font-weight:700;white-space:nowrap;background:#fafafa}
+.jump i{width:0;height:0;border-left:7px solid #111;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.map{height:96px;background:#e3e3e3;position:relative;overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map .cap{position:absolute;left:10px;bottom:7px;font-size:11px;font-weight:700;background:#fff;padding:2px 7px;border-radius:999px}
+.footer{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:10px}
+.resume{flex:1;height:54px;background:#111;color:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:16px}
+.resume small{font-weight:500;opacity:.75;font-size:12px}
+.sq{width:54px;height:54px;border-radius:16px;border:1.5px solid #cfcfcf;background:#fff;display:flex;align-items:center;justify-content:center}
+.fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(rgba(243,243,243,0),#f3f3f3 55%);pointer-events:none}
+.toast{position:absolute;left:12px;right:12px;bottom:50px;background:#fff;color:#111;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.toast .ok{width:20px;height:20px;border-radius:50%;background:#F7993F;display:flex;align-items:center;justify-content:center;flex:none}
+.toast small{font-weight:500;color:#666;margin-left:auto}
+/* chapters */
+.chh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.chh h2{font-size:20px;font-weight:800}
+.tog{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#444}
+.tog i{width:34px;height:20px;border-radius:999px;background:#F7993F;position:relative;display:inline-block}
+.tog i:after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.ch{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:14px;margin:0 -4px}
+.ch .th{width:50px;height:34px;border-radius:8px;background:#cfcfcf;position:relative;overflow:hidden;flex:none}
+.ch .th svg{position:absolute;inset:0;width:100%;height:100%}
+.ch .tx{flex:1;min-width:0}
+.ch .tx b{font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.ch .tx b span{font-size:11px;color:#777;font-weight:600;font-variant-numeric:tabular-nums}
+.ch .tx small{display:block;font-size:11px;color:#777;margin-top:1px}
+.ch .pr{height:3px;background:#ddd;border-radius:2px;margin-top:5px;position:relative}
+.ch .pr i{position:absolute;left:0;top:0;height:100%;background:#8a8a8a;border-radius:2px}
+.ch.cur{background:#fff;border:1.5px solid #F7993F}
+.ch.cur .pr i{background:#F7993F}
+.ch .st{font-size:10.5px;font-weight:700;background:#FFDDBE;padding:3px 8px;border-radius:999px}
+.ch .st.done{background:#e4e4e4;color:#444}
+.ch .st.off{background:transparent;color:#999;border:1.5px solid #ddd}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.22)}
+
+html,body{height:100%}
+body{background:#ececec;font-family:Inter,system-ui,sans-serif;color:#111;-webkit-font-smoothing:antialiased}
+.page{min-height:100%;display:flex;align-items:center;justify-content:center;gap:44px;padding:20px}
+.stage{width:calc(396px*var(--k,1));height:calc(850px*var(--k,1));flex:none;position:relative}
+.stage .phone{transform:scale(var(--k,1));transform-origin:0 0;box-shadow:0 24px 70px rgba(0,0,0,.22);touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.phone *{cursor:default}
+.tap{cursor:pointer!important}
+.tap *{cursor:pointer!important}
+.panel{width:290px;flex:none;color:#222}
+.panel .kick{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#777;margin-bottom:8px}
+.panel h1{font-size:21px;font-weight:800;line-height:1.2;letter-spacing:-.3px}
+.panel h1 em{font-style:normal;color:#F7993F}
+.panel ol{list-style:none;margin:18px 0 0;display:flex;flex-direction:column;gap:9px;counter-reset:s}
+.panel ol li{font-size:13.5px;font-weight:500;line-height:1.35;padding-left:30px;position:relative;counter-increment:s}
+.panel ol li:before{content:counter(s);position:absolute;left:0;top:-1px;width:21px;height:21px;border-radius:50%;background:#F7993F;color:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.panel .note{margin-top:16px;font-size:12px;color:#666;font-weight:500;line-height:1.4}
+.qrbox{margin-top:20px;display:flex;gap:14px;align-items:center}
+.qrbox .qr{width:132px;height:132px;flex:none;background:#fff;padding:9px;border-radius:12px;border:1.5px solid #d6d6d6}
+.qrbox .qr svg{display:block;width:100%;height:100%}
+.qrbox b{display:block;font-size:13px;font-weight:800;margin-bottom:5px}
+.qrbox span{display:block;font-size:11px;color:#444;line-height:1.4;word-break:break-all;font-weight:500}
+.qrbox small{display:block;font-size:11px;color:#777;margin-top:5px}
+.ctl{margin-top:20px;padding-top:14px;border-top:1px solid #d4d4d4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11.5px;color:#555;font-weight:600}
+.ctl button{font:inherit;font-size:11.5px;font-weight:700;border:1.5px solid #bbb;background:#fff;border-radius:999px;padding:4px 9px;cursor:pointer;color:#111}
+.ctl button.on{background:#111;color:#fff;border-color:#111}
+.ctl button[data-restart]{margin-left:auto}
+@media (max-width:820px){.page{flex-direction:column;gap:28px}.panel{width:min(396px,100%)}}
+@media (max-width:480px){html,body{overflow:hidden;background:#fff}.page{display:block;padding:0;min-height:0;height:100%}.panel{display:none}.stage{width:100%;height:100%;height:100dvh}.stage .phone{border:0;border-radius:0;box-shadow:none;width:100%;height:100%;transform:none}}
+html.still,html.still body{overflow:hidden;background:#fff;height:auto}html.still .page{display:block;padding:0;min-height:0}html.still .panel{display:none}html.still .stage{width:390px;height:844px}html.still .stage .phone{border:0;border-radius:0;box-shadow:none;width:390px;height:844px;transform:none}
+@media (max-width:480px) and (pointer:coarse){.status,.home{display:none}.pane{top:0}.nav{height:auto;padding:8px 12px calc(10px + env(safe-area-inset-bottom))}}
+#watch{display:flex;flex-direction:column;flex:1;min-height:0}
+.pane{position:absolute;left:0;right:0;top:46px;bottom:0;display:flex;flex-direction:column;background:#fff;transform:translateY(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);will-change:transform;z-index:5}
+.pane.open{transform:translateY(0)}
+.sheet{overflow-y:auto}
+.sheet::-webkit-scrollbar{display:none}
+.sheetbody{padding-bottom:110px}
+.chip{animation:chipin .35s cubic-bezier(.2,.8,.2,1)}
+.chip.out{animation:chipout .3s ease forwards}
+@keyframes chipin{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes chipout{to{transform:translateY(8px);opacity:0}}
+.chip .ring .arc{transition:stroke-dashoffset .1s linear}
+.toast{animation:chipin .3s ease}
+.toast.out{animation:chipout .3s ease forwards}
+#chapters{position:absolute;inset:0;display:none;z-index:6}
+#chapters.open{display:block}
+#chapters .dim{cursor:pointer}
+#chapters .sheet{position:absolute;left:0;right:0;bottom:0;top:clamp(120px,36%,300px);margin:0;padding-top:10px}
+.seg div{cursor:pointer}
+.tog.off i{background:#bbb}.tog.off i:after{right:16px}
+.srcrow{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid #f0f0f0;font-size:12.5px;align-items:flex-start}
+.srcrow:last-child{border-bottom:0}
+.srcrow b{display:block;font-weight:600}.srcrow span{color:#777;font-size:11.5px}
+.empty{font-size:12.5px;color:#777;padding:14px 0}
+.scrub{height:14px;background:none;display:flex;align-items:center}
+.scrub .track{position:absolute;left:0;right:0;top:5px;height:4px;background:rgba(255,255,255,.38);border-radius:2px}
+.scrub .fill{position:absolute;left:0;top:5px;height:4px}
+.scrub .mk{top:2px}.scrub .mk.cur{top:0}.scrub .tk{top:3px;width:3px;height:8px}.scrub .head{top:1px}
+.scrub .tk,.scrub .mk{cursor:pointer}
+.scrub .tk:after,.scrub .mk:after{content:"";position:absolute;left:-10px;right:-10px;top:-10px;bottom:-10px}
+.sq.saved{background:#111;border-color:#111}
+/* film simulation: slow push-in while playing, subtitle line, cut flash */
+.video .scene{transform-origin:55% 60%;animation:kb 44s ease-in-out infinite alternate;animation-play-state:paused;transition:filter .4s}
+.video.live .scene{animation-play-state:running}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.14) translate(-2.5%,1.5%)}}
+.video .cap{position:absolute;left:34px;right:34px;bottom:52px;text-align:center;font-size:12px;font-weight:600;line-height:1.35;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.6);transition:opacity .25s;pointer-events:none}
+.video .cap:empty,.video.busy .cap{opacity:0}
+.video .flash{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.topic .inf{flex:none}
+</style></head><body>
+<div class="page"><div class="stage"><div class="phone" id="phone"><div class="status"><span>9:41</span><span class="ic">
+<svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx=".8" fill="#111"/><rect x="4.5" y="5.5" width="3" height="6.5" rx=".8" fill="#111"/><rect x="9" y="3" width="3" height="9" rx=".8" fill="#111"/><rect x="13.5" y="0" width="3" height="12" rx=".8" fill="#111"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5L1 4.5a9.6 9.6 0 0 1 14 0z" fill="#111"/></svg>
+<svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="#111"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#111"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#111"/></svg></span></div>
+<div id="watch"><div class="topbar"><div class="city">Nashik <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="search"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#7a7a7a" stroke-width="2"/><path d="M15 15l5 5" stroke="#7a7a7a" stroke-width="2" stroke-linecap="round"/></svg>Search this city’s past</div></div>
+<div class="video" id="video"><svg class="scene" viewBox="0 0 358 216" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e6e6e"/><stop offset="1" stop-color="#a3a3a3"/></linearGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d7d7d"/><stop offset="1" stop-color="#4f4f4f"/></linearGradient></defs>
+<rect width="358" height="216" fill="url(#sky)"/>
+<path d="M0 118 L40 96 L80 108 L120 84 L160 100 L200 92 L240 104 L280 90 L320 100 L358 92 L358 150 L0 150Z" fill="#7b7b7b"/>
+<path d="M0 132 L50 118 L90 128 L140 112 L190 126 L230 118 L270 128 L300 122 L358 130 L358 160 L0 160Z" fill="#5f5f5f"/>
+<g fill="#383838"><path d="M258 150 L258 92 L266 78 L268 60 L272 50 L274 42 L277 38 L280 42 L282 50 L286 60 L288 78 L296 92 L296 150Z"/><rect x="236" y="118" width="20" height="32" rx="2"/><path d="M234 118 L246 102 L258 118Z"/><rect x="302" y="112" width="28" height="38" rx="2"/><path d="M300 112 L316 94 L332 112Z"/></g>
+<g fill="#4a4a4a"><rect x="220" y="150" width="138" height="6"/><rect x="214" y="156" width="144" height="6"/><rect x="208" y="162" width="150" height="6"/><rect x="202" y="168" width="156" height="6"/></g>
+<rect y="174" width="358" height="42" fill="url(#wat)"/>
+<g stroke="#9a9a9a" stroke-width="1" opacity=".5"><line x1="20" y1="184" x2="120" y2="184"/><line x1="60" y1="196" x2="200" y2="196"/><line x1="150" y1="206" x2="320" y2="206"/></g>
+<g fill="#454545"><circle cx="34" cy="150" r="18"/><circle cx="60" cy="156" r="14"/><circle cx="14" cy="160" r="12"/><rect x="31" y="160" width="6" height="16"/></g>
+</svg><div class="vtitle">Nashik Through Time</div>
+<div class="cap" id="cap"></div><div class="flash" id="flash"></div><div class="ctrls"><span id="playBtn" class="tap" style="display:flex"><span id="playIc"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"/></svg></span></span><span class="t"><span id="time">4:25</span> / 16:00</span><div class="scrub tap" id="scrub"></div><span id="chapBtn" class="tap" title="Chapters"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div></div>
+<div class="rail" id="rail"></div><div class="hint">Era rail follows the film · tap an era to jump</div>
+<div class="sec" style="overflow-y:auto"><div class="sech"><h3 id="secTitle">In this chapter</h3><span>tap i to read</span></div><div id="topics"></div></div>
+<div class="nav"><div class="on"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18" stroke="#111" stroke-width="2"/><circle cx="6" cy="12" r="2.6" fill="#111"/><circle cx="12" cy="12" r="2.6" fill="#fff" stroke="#111" stroke-width="2"/><circle cx="18" cy="12" r="2.6" fill="#fff" stroke="#111" stroke-width="2"/></svg>Timeline</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s7-7.2 7-12.5A7 7 0 0 0 5 9.5C5 14.8 12 22 12 22z" fill="#111"/><circle cx="12" cy="9.5" r="2.6" fill="#fff"/></svg>Map</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="#111" stroke-width="2"/><path d="M8 10h8M8 14h5" stroke="#111" stroke-width="2" stroke-linecap="round"/></svg>Stories</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>Saved</div></div></div>
+<div class="pane" id="read">
+<div class="mini" style="margin-top:6px"><div class="th"><svg class="scene" viewBox="0 0 358 216" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e6e6e"/><stop offset="1" stop-color="#a3a3a3"/></linearGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d7d7d"/><stop offset="1" stop-color="#4f4f4f"/></linearGradient></defs>
+<rect width="358" height="216" fill="url(#sky)"/>
+<path d="M0 118 L40 96 L80 108 L120 84 L160 100 L200 92 L240 104 L280 90 L320 100 L358 92 L358 150 L0 150Z" fill="#7b7b7b"/>
+<path d="M0 132 L50 118 L90 128 L140 112 L190 126 L230 118 L270 128 L300 122 L358 130 L358 160 L0 160Z" fill="#5f5f5f"/>
+<g fill="#383838"><path d="M258 150 L258 92 L266 78 L268 60 L272 50 L274 42 L277 38 L280 42 L282 50 L286 60 L288 78 L296 92 L296 150Z"/><rect x="236" y="118" width="20" height="32" rx="2"/><path d="M234 118 L246 102 L258 118Z"/><rect x="302" y="112" width="28" height="38" rx="2"/><path d="M300 112 L316 94 L332 112Z"/></g>
+<g fill="#4a4a4a"><rect x="220" y="150" width="138" height="6"/><rect x="214" y="156" width="144" height="6"/><rect x="208" y="162" width="150" height="6"/><rect x="202" y="168" width="156" height="6"/></g>
+<rect y="174" width="358" height="42" fill="url(#wat)"/>
+<g stroke="#9a9a9a" stroke-width="1" opacity=".5"><line x1="20" y1="184" x2="120" y2="184"/><line x1="60" y1="196" x2="200" y2="196"/><line x1="150" y1="206" x2="320" y2="206"/></g>
+<g fill="#454545"><circle cx="34" cy="150" r="18"/><circle cx="60" cy="156" r="14"/><circle cx="14" cy="160" r="12"/><rect x="31" y="160" width="6" height="16"/></g>
+</svg></div><div class="tx"><b id="miniT">Paused</b><span id="miniS"></span><div class="pb"><i id="miniPb"></i></div></div><div class="play tap" id="miniPlay"><svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5l12 7-12 7z" fill="#111"/></svg></div></div>
+<div class="sheet" id="sheet"><div class="handle tap" id="handle" style="flex:none"></div><div class="sheetbody" id="sheetBody"></div></div>
+<div class="fade"></div><div class="footer"><div class="resume tap" id="resumeBtn"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5l12 7-12 7z" fill="#fff"/></svg><span id="resumeLbl">Resume</span></div><div class="sq tap" id="saveBtn"><svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg></div></div>
+</div>
+<div id="chapters"><div class="dim"></div><div class="sheet"><div class="handle"></div><div class="chh"><h2>Chapters</h2><div class="tog tap" id="autoTog">Auto-pause at markers<i></i></div></div><div id="chList"></div></div></div>
+<div class="home"></div></div>
+</div>
+<aside class="panel">
+<div class="kick">Entry 2 · interactive prototype</div>
+<h1>Nashik Through Time — <em>tap‑through</em> prototype</h1>
+<ol>
+<li>Tap the orange chip when it appears</li>
+<li>Tap any tick or topic row</li>
+<li>Choose Summary / Explore / Sources</li>
+<li>Resume returns to the exact frame</li>
+</ol>
+<p class="note">Wireframe prototype, placeholder content, no real video. The 16-minute film is simulated, 2× speed by default.</p>
+<div class="qrbox"><div class="qr"><svg viewBox="0 0 37 37" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><path d="M0,0H1V1H0zM1,0H2V1H1zM2,0H3V1H2zM3,0H4V1H3zM4,0H5V1H4zM5,0H6V1H5zM6,0H7V1H6zM8,0H9V1H8zM9,0H10V1H9zM14,0H15V1H14zM18,0H19V1H18zM19,0H20V1H19zM21,0H22V1H21zM22,0H23V1H22zM23,0H24V1H23zM24,0H25V1H24zM27,0H28V1H27zM28,0H29V1H28zM30,0H31V1H30zM31,0H32V1H31zM32,0H33V1H32zM33,0H34V1H33zM34,0H35V1H34zM35,0H36V1H35zM36,0H37V1H36zM0,1H1V2H0zM6,1H7V2H6zM9,1H10V2H9zM10,1H11V2H10zM11,1H12V2H11zM17,1H18V2H17zM18,1H19V2H18zM20,1H21V2H20zM21,1H22V2H21zM22,1H23V2H22zM24,1H25V2H24zM28,1H29V2H28zM30,1H31V2H30zM36,1H37V2H36zM0,2H1V3H0zM2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM6,2H7V3H6zM9,2H10V3H9zM13,2H14V3H13zM15,2H16V3H15zM16,2H17V3H16zM17,2H18V3H17zM19,2H20V3H19zM20,2H21V3H20zM21,2H22V3H21zM23,2H24V3H23zM27,2H28V3H27zM30,2H31V3H30zM32,2H33V3H32zM33,2H34V3H33zM34,2H35V3H34zM36,2H37V3H36zM0,3H1V4H0zM2,3H3V4H2zM3,3H4V4H3zM4,3H5V4H4zM6,3H7V4H6zM8,3H9V4H8zM10,3H11V4H10zM12,3H13V4H12zM14,3H15V4H14zM16,3H17V4H16zM18,3H19V4H18zM19,3H20V4H19zM20,3H21V4H20zM22,3H23V4H22zM23,3H24V4H23zM25,3H26V4H25zM26,3H27V4H26zM27,3H28V4H27zM28,3H29V4H28zM30,3H31V4H30zM32,3H33V4H32zM33,3H34V4H33zM34,3H35V4H34zM36,3H37V4H36zM0,4H1V5H0zM2,4H3V5H2zM3,4H4V5H3zM4,4H5V5H4zM6,4H7V5H6zM8,4H9V5H8zM11,4H12V5H11zM15,4H16V5H15zM16,4H17V5H16zM18,4H19V5H18zM23,4H24V5H23zM25,4H26V5H25zM26,4H27V5H26zM27,4H28V5H27zM30,4H31V5H30zM32,4H33V5H32zM33,4H34V5H33zM34,4H35V5H34zM36,4H37V5H36zM0,5H1V6H0zM6,5H7V6H6zM8,5H9V6H8zM9,5H10V6H9zM12,5H13V6H12zM13,5H14V6H13zM18,5H19V6H18zM19,5H20V6H19zM21,5H22V6H21zM26,5H27V6H26zM30,5H31V6H30zM36,5H37V6H36zM0,6H1V7H0zM1,6H2V7H1zM2,6H3V7H2zM3,6H4V7H3zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM12,6H13V7H12zM14,6H15V7H14zM16,6H17V7H16zM18,6H19V7H18zM20,6H21V7H20zM22,6H23V7H22zM24,6H25V7H24zM26,6H27V7H26zM28,6H29V7H28zM30,6H31V7H30zM31,6H32V7H31zM32,6H33V7H32zM33,6H34V7H33zM34,6H35V7H34zM35,6H36V7H35zM36,6H37V7H36zM8,7H9V8H8zM12,7H13V8H12zM16,7H17V8H16zM17,7H18V8H17zM18,7H19V8H18zM20,7H21V8H20zM21,7H22V8H21zM22,7H23V8H22zM23,7H24V8H23zM26,7H27V8H26zM27,7H28V8H27zM28,7H29V8H28zM0,8H1V9H0zM4,8H5V9H4zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM9,8H10V9H9zM10,8H11V9H10zM13,8H14V9H13zM14,8H15V9H14zM15,8H16V9H15zM18,8H19V9H18zM19,8H20V9H19zM21,8H22V9H21zM23,8H24V9H23zM27,8H28V9H27zM29,8H30V9H29zM30,8H31V9H30zM31,8H32V9H31zM32,8H33V9H32zM33,8H34V9H33zM36,8H37V9H36zM0,9H1V10H0zM9,9H10V10H9zM10,9H11V10H10zM13,9H14V10H13zM14,9H15V10H14zM16,9H17V10H16zM19,9H20V10H19zM20,9H21V10H20zM21,9H22V10H21zM22,9H23V10H22zM23,9H24V10H23zM24,9H25V10H24zM25,9H26V10H25zM26,9H27V10H26zM27,9H28V10H27zM28,9H29V10H28zM29,9H30V10H29zM32,9H33V10H32zM33,9H34V10H33zM35,9H36V10H35zM2,10H3V11H2zM4,10H5V11H4zM5,10H6V11H5zM6,10H7V11H6zM8,10H9V11H8zM11,10H12V11H11zM16,10H17V11H16zM17,10H18V11H17zM20,10H21V11H20zM23,10H24V11H23zM25,10H26V11H25zM26,10H27V11H26zM27,10H28V11H27zM28,10H29V11H28zM32,10H33V11H32zM34,10H35V11H34zM0,11H1V12H0zM2,11H3V12H2zM4,11H5V12H4zM7,11H8V12H7zM10,11H11V12H10zM11,11H12V12H11zM12,11H13V12H12zM14,11H15V12H14zM17,11H18V12H17zM18,11H19V12H18zM21,11H22V12H21zM23,11H24V12H23zM26,11H27V12H26zM27,11H28V12H27zM30,11H31V12H30zM34,11H35V12H34zM35,11H36V12H35zM0,12H1V13H0zM3,12H4V13H3zM4,12H5V13H4zM6,12H7V13H6zM8,12H9V13H8zM11,12H12V13H11zM14,12H15V13H14zM15,12H16V13H15zM17,12H18V13H17zM19,12H20V13H19zM20,12H21V13H20zM21,12H22V13H21zM22,12H23V13H22zM24,12H25V13H24zM29,12H30V13H29zM30,12H31V13H30zM31,12H32V13H31zM34,12H35V13H34zM35,12H36V13H35zM36,12H37V13H36zM0,13H1V14H0zM3,13H4V14H3zM5,13H6V14H5zM7,13H8V14H7zM9,13H10V14H9zM10,13H11V14H10zM13,13H14V14H13zM14,13H15V14H14zM15,13H16V14H15zM16,13H17V14H16zM17,13H18V14H17zM18,13H19V14H18zM21,13H22V14H21zM23,13H24V14H23zM26,13H27V14H26zM27,13H28V14H27zM28,13H29V14H28zM29,13H30V14H29zM32,13H33V14H32zM33,13H34V14H33zM35,13H36V14H35zM0,14H1V15H0zM1,14H2V15H1zM2,14H3V15H2zM3,14H4V15H3zM6,14H7V15H6zM7,14H8V15H7zM9,14H10V15H9zM11,14H12V15H11zM13,14H14V15H13zM15,14H16V15H15zM18,14H19V15H18zM21,14H22V15H21zM22,14H23V15H22zM23,14H24V15H23zM27,14H28V15H27zM29,14H30V15H29zM30,14H31V15H30zM31,14H32V15H31zM32,14H33V15H32zM33,14H34V15H33zM34,14H35V15H34zM0,15H1V16H0zM1,15H2V16H1zM3,15H4V16H3zM4,15H5V16H4zM5,15H6V16H5zM7,15H8V16H7zM8,15H9V16H8zM9,15H10V16H9zM13,15H14V16H13zM14,15H15V16H14zM15,15H16V16H15zM20,15H21V16H20zM21,15H22V16H21zM24,15H25V16H24zM26,15H27V16H26zM28,15H29V16H28zM31,15H32V16H31zM32,15H33V16H32zM34,15H35V16H34zM36,15H37V16H36zM2,16H3V17H2zM4,16H5V17H4zM6,16H7V17H6zM7,16H8V17H7zM9,16H10V17H9zM11,16H12V17H11zM12,16H13V17H12zM13,16H14V17H13zM14,16H15V17H14zM15,16H16V17H15zM16,16H17V17H16zM19,16H20V17H19zM20,16H21V17H20zM21,16H22V17H21zM23,16H24V17H23zM30,16H31V17H30zM33,16H34V17H33zM34,16H35V17H34zM36,16H37V17H36zM1,17H2V18H1zM8,17H9V18H8zM10,17H11V18H10zM12,17H13V18H12zM18,17H19V18H18zM19,17H20V18H19zM22,17H23V18H22zM23,17H24V18H23zM24,17H25V18H24zM26,17H27V18H26zM27,17H28V18H27zM28,17H29V18H28zM32,17H33V18H32zM33,17H34V18H33zM34,17H35V18H34zM35,17H36V18H35zM1,18H2V19H1zM6,18H7V19H6zM8,18H9V19H8zM13,18H14V19H13zM14,18H15V19H14zM15,18H16V19H15zM19,18H20V19H19zM23,18H24V19H23zM27,18H28V19H27zM29,18H30V19H29zM31,18H32V19H31zM34,18H35V19H34zM1,19H2V20H1zM3,19H4V20H3zM5,19H6V20H5zM7,19H8V20H7zM10,19H11V20H10zM13,19H14V20H13zM15,19H16V20H15zM16,19H17V20H16zM17,19H18V20H17zM18,19H19V20H18zM19,19H20V20H19zM20,19H21V20H20zM21,19H22V20H21zM22,19H23V20H22zM23,19H24V20H23zM26,19H27V20H26zM27,19H28V20H27zM30,19H31V20H30zM34,19H35V20H34zM35,19H36V20H35zM1,20H2V21H1zM2,20H3V21H2zM6,20H7V21H6zM7,20H8V21H7zM9,20H10V21H9zM10,20H11V21H10zM11,20H12V21H11zM13,20H14V21H13zM17,20H18V21H17zM21,20H22V21H21zM22,20H23V21H22zM23,20H24V21H23zM24,20H25V21H24zM27,20H28V21H27zM28,20H29V21H28zM29,20H30V21H29zM30,20H31V21H30zM31,20H32V21H31zM34,20H35V21H34zM0,21H1V22H0zM1,21H2V22H1zM2,21H3V22H2zM3,21H4V22H3zM4,21H5V22H4zM5,21H6V22H5zM7,21H8V22H7zM9,21H10V22H9zM12,21H13V22H12zM14,21H15V22H14zM15,21H16V22H15zM23,21H24V22H23zM24,21H25V22H24zM25,21H26V22H25zM27,21H28V22H27zM28,21H29V22H28zM31,21H32V22H31zM32,21H33V22H32zM0,22H1V23H0zM3,22H4V23H3zM4,22H5V23H4zM5,22H6V23H5zM6,22H7V23H6zM7,22H8V23H7zM9,22H10V23H9zM13,22H14V23H13zM14,22H15V23H14zM15,22H16V23H15zM17,22H18V23H17zM21,22H22V23H21zM23,22H24V23H23zM25,22H26V23H25zM26,22H27V23H26zM27,22H28V23H27zM30,22H31V23H30zM31,22H32V23H31zM32,22H33V23H32zM33,22H34V23H33zM34,22H35V23H34zM0,23H1V24H0zM3,23H4V24H3zM4,23H5V24H4zM5,23H6V24H5zM8,23H9V24H8zM9,23H10V24H9zM10,23H11V24H10zM13,23H14V24H13zM14,23H15V24H14zM15,23H16V24H15zM17,23H18V24H17zM18,23H19V24H18zM19,23H20V24H19zM20,23H21V24H20zM21,23H22V24H21zM22,23H23V24H22zM26,23H27V24H26zM27,23H28V24H27zM31,23H32V24H31zM32,23H33V24H32zM34,23H35V24H34zM36,23H37V24H36zM3,24H4V25H3zM4,24H5V25H4zM6,24H7V25H6zM18,24H19V25H18zM21,24H22V25H21zM29,24H30V25H29zM30,24H31V25H30zM31,24H32V25H31zM33,24H34V25H33zM34,24H35V25H34zM35,24H36V25H35zM0,25H1V26H0zM2,25H3V26H2zM3,25H4V26H3zM4,25H5V26H4zM5,25H6V26H5zM7,25H8V26H7zM9,25H10V26H9zM10,25H11V26H10zM11,25H12V26H11zM12,25H13V26H12zM13,25H14V26H13zM16,25H17V26H16zM19,25H20V26H19zM20,25H21V26H20zM21,25H22V26H21zM23,25H24V26H23zM24,25H25V26H24zM25,25H26V26H25zM26,25H27V26H26zM27,25H28V26H27zM29,25H30V26H29zM32,25H33V26H32zM33,25H34V26H33zM2,26H3V27H2zM3,26H4V27H3zM4,26H5V27H4zM5,26H6V27H5zM6,26H7V27H6zM7,26H8V27H7zM11,26H12V27H11zM13,26H14V27H13zM16,26H17V27H16zM17,26H18V27H17zM18,26H19V27H18zM20,26H21V27H20zM21,26H22V27H21zM23,26H24V27H23zM26,26H27V27H26zM27,26H28V27H27zM28,26H29V27H28zM29,26H30V27H29zM34,26H35V27H34zM3,27H4V28H3zM7,27H8V28H7zM8,27H9V28H8zM11,27H12V28H11zM12,27H13V28H12zM13,27H14V28H13zM14,27H15V28H14zM17,27H18V28H17zM21,27H22V28H21zM22,27H23V28H22zM27,27H28V28H27zM28,27H29V28H28zM31,27H32V28H31zM34,27H35V28H34zM36,27H37V28H36zM0,28H1V29H0zM1,28H2V29H1zM6,28H7V29H6zM11,28H12V29H11zM12,28H13V29H12zM15,28H16V29H15zM17,28H18V29H17zM19,28H20V29H19zM20,28H21V29H20zM21,28H22V29H21zM24,28H25V29H24zM27,28H28V29H27zM28,28H29V29H28zM29,28H30V29H29zM30,28H31V29H30zM31,28H32V29H31zM32,28H33V29H32zM34,28H35V29H34zM35,28H36V29H35zM36,28H37V29H36zM8,29H9V30H8zM11,29H12V30H11zM12,29H13V30H12zM13,29H14V30H13zM15,29H16V30H15zM16,29H17V30H16zM17,29H18V30H17zM18,29H19V30H18zM21,29H22V30H21zM23,29H24V30H23zM26,29H27V30H26zM28,29H29V30H28zM32,29H33V30H32zM0,30H1V31H0zM1,30H2V31H1zM2,30H3V31H2zM3,30H4V31H3zM4,30H5V31H4zM5,30H6V31H5zM6,30H7V31H6zM8,30H9V31H8zM11,30H12V31H11zM14,30H15V31H14zM15,30H16V31H15zM16,30H17V31H16zM18,30H19V31H18zM20,30H21V31H20zM23,30H24V31H23zM24,30H25V31H24zM25,30H26V31H25zM26,30H27V31H26zM28,30H29V31H28zM30,30H31V31H30zM32,30H33V31H32zM0,31H1V32H0zM6,31H7V32H6zM9,31H10V32H9zM10,31H11V32H10zM21,31H22V32H21zM23,31H24V32H23zM24,31H25V32H24zM28,31H29V32H28zM32,31H33V32H32zM33,31H34V32H33zM34,31H35V32H34zM35,31H36V32H35zM0,32H1V33H0zM2,32H3V33H2zM3,32H4V33H3zM4,32H5V33H4zM6,32H7V33H6zM8,32H9V33H8zM9,32H10V33H9zM10,32H11V33H10zM16,32H17V33H16zM20,32H21V33H20zM26,32H27V33H26zM28,32H29V33H28zM29,32H30V33H29zM30,32H31V33H30zM31,32H32V33H31zM32,32H33V33H32zM33,32H34V33H33zM34,32H35V33H34zM35,32H36V33H35zM36,32H37V33H36zM0,33H1V34H0zM2,33H3V34H2zM3,33H4V34H3zM4,33H5V34H4zM6,33H7V34H6zM9,33H10V34H9zM11,33H12V34H11zM12,33H13V34H12zM14,33H15V34H14zM17,33H18V34H17zM18,33H19V34H18zM19,33H20V34H19zM21,33H22V34H21zM23,33H24V34H23zM24,33H25V34H24zM26,33H27V34H26zM27,33H28V34H27zM29,33H30V34H29zM30,33H31V34H30zM31,33H32V34H31zM33,33H34V34H33zM34,33H35V34H34zM36,33H37V34H36zM0,34H1V35H0zM2,34H3V35H2zM3,34H4V35H3zM4,34H5V35H4zM6,34H7V35H6zM9,34H10V35H9zM10,34H11V35H10zM12,34H13V35H12zM13,34H14V35H13zM15,34H16V35H15zM17,34H18V35H17zM19,34H20V35H19zM21,34H22V35H21zM23,34H24V35H23zM24,34H25V35H24zM27,34H28V35H27zM30,34H31V35H30zM33,34H34V35H33zM0,35H1V36H0zM6,35H7V36H6zM10,35H11V36H10zM11,35H12V36H11zM14,35H15V36H14zM15,35H16V36H15zM16,35H17V36H16zM17,35H18V36H17zM18,35H19V36H18zM19,35H20V36H19zM20,35H21V36H20zM21,35H22V36H21zM23,35H24V36H23zM24,35H25V36H24zM32,35H33V36H32zM34,35H35V36H34zM35,35H36V36H35zM0,36H1V37H0zM1,36H2V37H1zM2,36H3V37H2zM3,36H4V37H3zM4,36H5V37H4zM5,36H6V37H5zM6,36H7V37H6zM8,36H9V37H8zM12,36H13V37H12zM13,36H14V37H13zM16,36H17V37H16zM17,36H18V37H17zM20,36H21V37H20zM21,36H22V37H21zM22,36H23V37H22zM23,36H24V37H23zM27,36H28V37H27zM29,36H30V37H29zM30,36H31V37H30zM31,36H32V37H31zM33,36H34V37H33zM34,36H35V37H34zM35,36H36V37H35zM36,36H37V37H36z" fill="#111"/></svg></div><div><b>Open on your phone</b><span>https://gsayesh.github.io/fl-interactive-documentary-ux-design-2800294/</span><small>Works in any mobile browser, no install</small></div></div>
+<div class="ctl"><span>Film speed</span><button data-speed="1">1×</button><button data-speed="2" class="on">2×</button><button data-speed="8">8×</button><button data-restart>Restart</button></div>
+</aside>
+</div>
+<script>const ICON={"play": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5l12 7-12 7z\" fill=\"#fff\"/></svg>", "pause": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"5\" width=\"4\" height=\"14\" rx=\"1\" fill=\"#fff\"/><rect x=\"14\" y=\"5\" width=\"4\" height=\"14\" rx=\"1\" fill=\"#fff\"/></svg>", "chevr": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M9 6l6 6-6 6\" fill=\"none\" stroke=\"#555\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "chevr12": "<svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M9 6l6 6-6 6\" fill=\"none\" stroke=\"#999\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "check": "<svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5 12.5l4.5 4.5L19 8\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "pin": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 22s7-7.2 7-12.5A7 7 0 0 0 5 9.5C5 14.8 12 22 12 22z\" fill=\"#111\"/><circle cx=\"12\" cy=\"9.5\" r=\"2.6\" fill=\"#fff\"/></svg>", "pin16": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12 22s7-7.2 7-12.5A7 7 0 0 0 5 9.5C5 14.8 12 22 12 22z\" fill=\"#555\"/><circle cx=\"12\" cy=\"9.5\" r=\"2.6\" fill=\"#fff\"/></svg>", "people": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"9\" cy=\"8\" r=\"3.5\" fill=\"#111\"/><circle cx=\"16.5\" cy=\"9\" r=\"2.8\" fill=\"#111\"/><path d=\"M2.5 19c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z\" fill=\"#111\"/><path d=\"M14.5 13.4c.6-.2 1.3-.4 2-.4 2.9 0 5 2 5 5h-5.2\" fill=\"#111\"/></svg>", "doc": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 3h8l4 4v14H6z\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\" stroke-linejoin=\"round\"/><path d=\"M9 12h6M9 16h6\" stroke=\"#111\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>", "doc16": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 3h8l4 4v14H6z\" fill=\"none\" stroke=\"#555\" stroke-width=\"2\" stroke-linejoin=\"round\"/><path d=\"M9 12h6M9 16h6\" stroke=\"#555\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>", "people16": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"9\" cy=\"8\" r=\"3.5\" fill=\"#555\"/><circle cx=\"16.5\" cy=\"9\" r=\"2.8\" fill=\"#555\"/><path d=\"M2.5 19c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z\" fill=\"#555\"/><path d=\"M14.5 13.4c.6-.2 1.3-.4 2-.4 2.9 0 5 2 5 5h-5.2\" fill=\"#555\"/></svg>", "chev": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 9l6 6 6-6\" fill=\"none\" stroke=\"#555\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "book": "<svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 3h12v18l-6-4-6 4z\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\" stroke-linejoin=\"round\"/></svg>", "bookfW": "<svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 3h12v18l-6-4-6 4z\" fill=\"#fff\"/></svg>"};const SCENE="<svg class=\"scene\" viewBox=\"0 0 358 216\" preserveAspectRatio=\"xMidYMid slice\" xmlns=\"http://www.w3.org/2000/svg\">\n<defs><linearGradient id=\"sky\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#6e6e6e\"/><stop offset=\"1\" stop-color=\"#a3a3a3\"/></linearGradient>\n<linearGradient id=\"wat\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#7d7d7d\"/><stop offset=\"1\" stop-color=\"#4f4f4f\"/></linearGradient></defs>\n<rect width=\"358\" height=\"216\" fill=\"url(#sky)\"/>\n<path d=\"M0 118 L40 96 L80 108 L120 84 L160 100 L200 92 L240 104 L280 90 L320 100 L358 92 L358 150 L0 150Z\" fill=\"#7b7b7b\"/>\n<path d=\"M0 132 L50 118 L90 128 L140 112 L190 126 L230 118 L270 128 L300 122 L358 130 L358 160 L0 160Z\" fill=\"#5f5f5f\"/>\n<g fill=\"#383838\"><path d=\"M258 150 L258 92 L266 78 L268 60 L272 50 L274 42 L277 38 L280 42 L282 50 L286 60 L288 78 L296 92 L296 150Z\"/><rect x=\"236\" y=\"118\" width=\"20\" height=\"32\" rx=\"2\"/><path d=\"M234 118 L246 102 L258 118Z\"/><rect x=\"302\" y=\"112\" width=\"28\" height=\"38\" rx=\"2\"/><path d=\"M300 112 L316 94 L332 112Z\"/></g>\n<g fill=\"#4a4a4a\"><rect x=\"220\" y=\"150\" width=\"138\" height=\"6\"/><rect x=\"214\" y=\"156\" width=\"144\" height=\"6\"/><rect x=\"208\" y=\"162\" width=\"150\" height=\"6\"/><rect x=\"202\" y=\"168\" width=\"156\" height=\"6\"/></g>\n<rect y=\"174\" width=\"358\" height=\"42\" fill=\"url(#wat)\"/>\n<g stroke=\"#9a9a9a\" stroke-width=\"1\" opacity=\".5\"><line x1=\"20\" y1=\"184\" x2=\"120\" y2=\"184\"/><line x1=\"60\" y1=\"196\" x2=\"200\" y2=\"196\"/><line x1=\"150\" y1=\"206\" x2=\"320\" y2=\"206\"/></g>\n<g fill=\"#454545\"><circle cx=\"34\" cy=\"150\" r=\"18\"/><circle cx=\"60\" cy=\"156\" r=\"14\"/><circle cx=\"14\" cy=\"160\" r=\"12\"/><rect x=\"31\" y=\"160\" width=\"6\" height=\"16\"/></g>\n</svg>";const MAP="<div class=\"map\"><svg viewBox=\"0 0 326 96\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"326\" height=\"96\" fill=\"#e6e6e6\"/>\n<path d=\"M0 30 C60 20 90 60 150 50 S240 20 326 36\" stroke=\"#fff\" stroke-width=\"5\" fill=\"none\"/><path d=\"M40 0 C60 40 50 70 90 96\" stroke=\"#fff\" stroke-width=\"4\" fill=\"none\"/><path d=\"M180 96 C200 60 250 70 326 70\" stroke=\"#fff\" stroke-width=\"4\" fill=\"none\"/>\n<path d=\"M0 64 C70 70 120 90 200 80 S280 88 326 92\" stroke=\"#bdbdbd\" stroke-width=\"7\" fill=\"none\" opacity=\".8\"/>\n<g fill=\"#111\"><path d=\"M172 58s9-9.5 9-16a9 9 0 0 0-18 0c0 6.5 9 16 9 16z\"/><circle cx=\"172\" cy=\"42\" r=\"3.2\" fill=\"#fff\"/></g>\n<text x=\"184\" y=\"22\" font-family=\"Inter,sans-serif\" font-size=\"9\" font-weight=\"700\" fill=\"#333\">Trirashmi hill</text>\n<text x=\"246\" y=\"60\" font-family=\"Inter,sans-serif\" font-size=\"8\" fill=\"#666\">Godavari</text></svg><span class=\"cap\">Open full map</span></div>";
+const T=960;
+const ERAS=[{n:'Ancient',s:0,meta:'Godavari settlement'},{n:'Satavahana',s:180,meta:'Caves, kings & trade'},{n:'Medieval',s:400,meta:'Yadava & Sultanate rule'},{n:'Maratha',s:570,meta:'Peshwa-era temples'},{n:'British',s:740,meta:'Cantonment & railway'},{n:'Today',s:890,meta:'Kumbh Mela city'}];
+const TOPICS=[
+{t:30,era:0,title:'Settlement on the Godavari',sub:'c. 1000 BCE onwards · river bank',summary:'Nashik grew where the young Godavari leaves the Western Ghats. Early farming settlements on its banks are known from pottery and burial finds, long before any written record.',ev:['Pottery','Burials','River terraces'],places:[{n:'Ramkund',s:'Sacred bathing ghat on the Godavari',t:50}],people:[],sources:[{n:'Excavation reports, Deccan College',s:'Chalcolithic levels at Nashik'}]},
+{t:120,era:0,title:'Panchavati and the Ramayana',sub:'Legend · forest of five banyans',summary:'Tradition places Rama, Sita and Lakshmana’s forest exile at Panchavati on the Godavari. The story explains the city’s name, from the cutting of Shurpanakha’s nose (nasika).',ev:['Epic tradition','Temple names'],places:[{n:'Sita Gufa',s:'Cave shrine in Panchavati',t:140}],people:[{n:'Rama, Sita, Lakshmana',s:'Exiles of the epic',t:125}],sources:[{n:'Valmiki Ramayana, Aranya Kanda',s:'Forest exile episodes'}]},
+{t:185,era:1,title:'Gautamiputra Satakarni',sub:'r. c. 106 – 130 CE · Satavahana king',summary:'The Satavahana king who drove the Western Kshatrapas out of the Deccan. His mother’s inscription at Pandavleni describes him as the one who “uprooted the Khakharata lineage”.',ev:['Inscriptions','Restruck coins'],places:[{n:'Cave 3 · Pandavleni',s:'Inscription of Gautami Balashri',t:300}],people:[{n:'Nahapana',s:'Western Kshatrapa rival',t:220},{n:'Gautami Balashri',s:'Queen mother, donor of Cave 3',t:300}],sources:[{n:'Nasik cave inscription No. 2',s:'Eulogy of Gautamiputra'},{n:'Jogalthembi hoard',s:'Nahapana’s coins restruck'}]},
+{t:272,era:1,title:'Pandavleni Caves',sub:'1st c. BCE – 3rd c. CE · Trirashmi hill',summary:'Twenty-four Buddhist caves cut into Trirashmi hill between the 1st century BCE and the 3rd century CE. Their donor inscriptions name Satavahana kings and their Kshatrapa rivals, making the caves the best-dated record of who ruled Nashik, and when.',ev:['Inscriptions','Coins','Cave remains'],places:[{n:'Cave 3 · Gautami Balashri vihara',s:'Built by the queen mother, c. 150 CE',t:304},{n:'Cave 10 · Nahapana vihara',s:'Donated by Nahapana’s son-in-law',t:340},{n:'Cave 18 · Chaitya hall',s:'Oldest of the group, c. 1st century BCE',t:290}],people:[{n:'Gautamiputra Satakarni',s:'Satavahana king who retook Nashik',t:185},{n:'Nahapana',s:'Western Kshatrapa ruler, his rival',t:220}],sources:[{n:'Nasik cave inscriptions (Senart, 1905)',s:'Epigraphia Indica VIII'},{n:'Ushavadata’s donations',s:'Cave 10 inscription'},{n:'ASI site notice',s:'Trirashmi / Pandavleni'},{n:'Coin finds, Nashik district',s:'Satavahana lead & potin coins'}]},
+{t:370,era:1,title:'The trade road to Paithan',sub:'Ports to the Deccan capital',summary:'Nashik sat on the route from the coastal ports of Sopara and Kalyan to Pratishthana (Paithan), the Satavahana capital. Cave donations by merchants and guilds show how much of the city’s wealth came from passing trade.',ev:['Guild inscriptions','Roman coins'],places:[{n:'Sopara',s:'Ancient port on the Konkan coast',t:380}],people:[{n:'Merchant donors',s:'Named in cave inscriptions',t:385}],sources:[{n:'Periplus of the Erythraean Sea',s:'1st-century trade manual'}]},
+{t:420,era:2,title:'The Yadavas of Devagiri',sub:'12th – 13th century',summary:'Under the Yadava kings of Devagiri the region prospered and Marathi emerged as a court language. Temple building and land grants from this period survive around Nashik.',ev:['Copper-plate grants','Temple fragments'],places:[{n:'Devagiri (Daulatabad)',s:'Yadava capital',t:430}],people:[{n:'Singhana II',s:'Yadava king, r. 1200–1246',t:440}],sources:[{n:'Yadava copper plates',s:'Land grants near Nashik'}]},
+{t:500,era:2,title:'Sultanate rule',sub:'14th – 17th century',summary:'After the Delhi Sultanate’s conquest of the Deccan the town passed to the Bahmani and then the Nizam Shahi sultans of Ahmadnagar, before the Mughals took it in the 1630s.',ev:['Chronicles','Fortifications'],places:[{n:'Ahmadnagar',s:'Nizam Shahi capital',t:520}],people:[{n:'Malik Ambar',s:'Nizam Shahi regent',t:540}],sources:[{n:'Burhan-i Ma’asir',s:'Nizam Shahi chronicle'}]},
+{t:590,era:3,title:'Peshwa-era temples',sub:'18th century · Kalaram & Sundar Narayan',summary:'Maratha patronage rebuilt the city’s riverside. The Sundar Narayan temple (1756) and the black-stone Kalaram temple (1782, Sardar Rangarao Odhekar) still anchor Panchavati.',ev:['Temple inscriptions','Peshwa daftar'],places:[{n:'Kalaram temple',s:'Panchavati, 1782',t:600},{n:'Sundar Narayan temple',s:'Ahilyabai Holkar bridge, 1756',t:620}],people:[{n:'Sardar Rangarao Odhekar',s:'Builder of Kalaram',t:605}],sources:[{n:'Peshwa Daftar records',s:'Grants to Nashik temples'}]},
+{t:680,era:3,title:'Trimbakeshwar',sub:'Jyotirlinga · source of the Godavari',summary:'Peshwa Balaji Bajirao rebuilt the Trimbakeshwar temple in the 1750s at the Godavari’s source, 28 km from the city, tying Nashik to one of the twelve jyotirlingas.',ev:['Temple architecture','Peshwa records'],places:[{n:'Trimbakeshwar temple',s:'Trimbak, 28 km west',t:690}],people:[{n:'Balaji Bajirao (Nanasaheb)',s:'Peshwa, patron',t:695}],sources:[{n:'Peshwa Daftar records',s:'Temple reconstruction'}]},
+{t:760,era:4,title:'Deolali cantonment',sub:'Established 1861',summary:'The British set up a military cantonment at Deolali in 1861, later a transit camp for troops bound for the Western Front. Its slang legacy survives in the word “doolally”.',ev:['Cantonment records','Memoirs'],places:[{n:'Deolali camp',s:'16 km south-east',t:770}],people:[],sources:[{n:'Gazetteer of the Bombay Presidency, Nasik',s:'1883 edition'}]},
+{t:840,era:4,title:'The railway arrives',sub:'1860s · Nashik Road station',summary:'The Great Indian Peninsula Railway’s Bombay–Bhusawal line reached the district in the 1860s. Nashik Road station, 8 km from the old town, pulled growth away from the river.',ev:['Railway maps','Gazetteers'],places:[{n:'Nashik Road station',s:'GIPR line',t:850}],people:[],sources:[{n:'GIPR annual reports',s:'1860s'}]},
+{t:900,era:5,title:'Kumbh Mela city',sub:'Every 12 years · Ramkund',summary:'Nashik is one of four Kumbh Mela sites. Every twelve years millions bathe at Ramkund and Trimbakeshwar, and the city’s ghats are rebuilt around the event.',ev:['Crowd estimates','Civic plans'],places:[{n:'Ramkund',s:'Main bathing ghat',t:905}],people:[],sources:[{n:'Nashik Municipal Corporation, Kumbh plan 2027',s:'Infrastructure brief'}]},
+{t:940,era:5,title:'Wine country',sub:'Since 1999',summary:'The first commercial vineyards opened near Nashik in 1999. The district now produces most of India’s wine, a new chapter for a valley that has traded along the Godavari for two millennia.',ev:['Industry data'],places:[{n:'Gangapur backwaters',s:'Vineyard belt',t:945}],people:[],sources:[{n:'Indian Grape Processing Board',s:'Production statistics'}]}
+];
+const fmt=s=>{s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const $=id=>document.getElementById(id);
+const eraAt=t=>{let e=0;ERAS.forEach((x,i)=>{if(t>=x.s)e=i});return e};
+const pct=t=>t/T*100;
+const LOOK=['brightness(1.06) contrast(.94)','none','brightness(.92) contrast(1.08)','brightness(1.02) contrast(1.02)','brightness(.86) contrast(1.16)','brightness(1.1) contrast(.96)'];
+const S={t:265,playing:true,speed:2,mode:'watch',topic:null,tab:'summary',auto:true,read:new Set(),saved:new Set(),chip:null,chipUntil:0,maxT:265,pausedAt:0,clock:0,frozen:false,toastEl:null,toastUntil:0};
+
+function renderScrub(){
+  let h='<div class="track"></div><div class="fill" style="width:'+pct(S.t)+'%"></div>';
+  ERAS.forEach((e,i)=>h+='<i class="mk'+(i===eraAt(S.t)?' cur':'')+'" style="left:'+pct(e.s)+'%" data-era="'+i+'" title="'+e.n+'"></i>');
+  TOPICS.forEach((x,i)=>{if(x.era===eraAt(S.t))h+='<i class="tk" style="left:'+pct(x.t)+'%" data-topic="'+i+'" title="'+x.title+'"></i>'});
+  h+='<i class="head" style="left:'+pct(S.t)+'%"></i>';
+  $('scrub').innerHTML=h;
+}
+function renderRail(){
+  const cur=eraAt(S.t);
+  $('rail').innerHTML='<div class="line"></div><div class="nodes">'+ERAS.map((e,i)=>'<div class="nd tap'+(i===cur?' cur':(i<cur?' done':''))+'" data-era="'+i+'"><div class="dot"></div><div class="lb">'+e.n+'</div></div>').join('')+'</div>';
+}
+function renderTopics(){
+  const cur=eraAt(S.t);
+  const list=TOPICS.map((x,i)=>({...x,i})).filter(x=>x.era===cur);
+  const now=[...list].reverse().find(x=>x.t<=S.t);
+  $('secTitle').textContent='In this chapter · '+ERAS[cur].n;
+  let h=list.map(x=>{const isNow=now&&now.i===x.i;const pill=isNow?'<span class="pill">Now</span>':(S.read.has(x.i)?'<span class="pill read">Read</span>':'');
+    return '<div class="topic tap'+(isNow?' now':'')+'" data-topic="'+x.i+'"><i class="bar"></i><span class="ts">'+fmt(x.t)+'</span><span class="nm">'+x.title+'</span>'+pill+'<span class="inf">i</span></div>'}).join('');
+  const next=TOPICS.map((x,i)=>({...x,i})).find(x=>x.t>S.t+2);
+  if(next)h+='<div class="upnext tap" data-topic="'+next.i+'"><div class="th">'+SCENE+'</div><div class="tx"><small>Up next in the film</small><b>'+fmt(next.t)+' · '+next.title+'</b><span>'+next.sub+'</span></div><span class="pv">Preview</span></div>';
+  $('topics').innerHTML=h;
+}
+/* subtitle line: the current topic's summary, sentence by sentence, every 10 film-seconds */
+const CAPS=TOPICS.map(x=>{const out=[];(x.summary.match(/[^.]+\.?/g)||[x.summary]).forEach(s=>{s=s.trim();while(s.length>120){let i=s.lastIndexOf(', ',120);if(i<40)i=s.lastIndexOf(' ',120);out.push(s.slice(0,i+1).trim());s=s.slice(i+1).trim()}if(s)out.push(s)});return out});
+function caption(){
+  const el=$('cap');const cur=eraAt(S.t);
+  const tp=TOPICS.map((x,i)=>({...x,i})).filter(x=>x.era===cur&&x.t<=S.t).pop();
+  let txt='';
+  if(tp){const c=CAPS[tp.i];txt=c[Math.floor((S.t-tp.t)/10)%c.length]}
+  else txt=ERAS[cur].n+' · '+ERAS[cur].meta;
+  if(el.dataset.txt!==txt){el.dataset.txt=txt;el.textContent=txt}
+}
+function paintPlay(){$('playIc').innerHTML=S.playing?ICON.pause:ICON.play}
+function paint(){
+  $('time').textContent=fmt(S.t);
+  const f=$('scrub').querySelector('.fill'),hd=$('scrub').querySelector('.head');
+  if(f){f.style.width=pct(S.t)+'%';hd.style.left=pct(S.t)+'%'}
+  if(S.chip!==null){const left=(S.chipUntil-S.clock)/8000;const arc=document.querySelector('.chip .arc');if(arc)arc.style.strokeDashoffset=75.4*(1-Math.max(0,left))}
+  caption();
+  const v=$('video');v.classList.toggle('live',S.playing&&S.mode==='watch'&&!S.frozen);v.classList.toggle('busy',!!v.querySelector('.chip,.toast'));
+  const look=LOOK[eraAt(S.t)];const sc=v.querySelector('.scene');if(sc.style.filter!==look)sc.style.filter=look;
+}
+function tick(){
+  if(!S.frozen){
+    S.clock+=100;
+    if(S.playing&&S.mode==='watch'){
+      const prev=S.t;S.t=Math.min(T,S.t+0.1*S.speed);if(S.t>S.maxT)S.maxT=S.t;
+      if(S.t>=T){S.playing=false;paintPlay()}
+      const hit=TOPICS.findIndex(x=>prev<x.t&&x.t<=S.t);
+      if(hit>=0&&S.auto)showChip(hit);
+      if(eraAt(prev)!==eraAt(S.t)){renderRail();renderScrub();renderTopics();cut()}
+      else if(Math.floor(prev)!==Math.floor(S.t))renderTopics();
+    }
+    if(S.chip!==null&&S.clock>=S.chipUntil)hideChip();
+    if(S.toastEl&&S.clock>=S.toastUntil){const d=S.toastEl;S.toastEl=null;d.classList.add('out');setTimeout(()=>d.remove(),300)}
+  }
+  paint();
+}
+function cut(){const f=$('flash');if(f.animate)f.animate([{opacity:.9},{opacity:0}],{duration:420,easing:'ease-out'})}
+function showChip(i,elapsed){
+  hideChip(true);S.chip=i;S.chipUntil=S.clock+8000-(elapsed||0);const x=TOPICS[i];
+  const d=document.createElement('div');d.className='chip tap';d.dataset.topic=i;
+  d.innerHTML='<svg class="ring" viewBox="0 0 28 28"><circle cx="14" cy="14" r="12" fill="none" stroke="#e2e2e2" stroke-width="3"/><circle class="arc" cx="14" cy="14" r="12" fill="none" stroke="#F7993F" stroke-width="3" stroke-dasharray="75.4" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 14 14)"/><path d="M14 20s4.2-4.3 4.2-7.5a4.2 4.2 0 0 0-8.4 0C9.8 15.7 14 20 14 20z" fill="#111"/></svg><div>'+x.title+'<small>Tap to pause &amp; read more</small></div>'+ICON.chevr;
+  $('video').appendChild(d);paint();
+}
+function hideChip(now){const c=document.querySelector('.chip');S.chip=null;if(!c)return;if(now){c.remove();return}c.classList.add('out');setTimeout(()=>c.remove(),300)}
+function toast(msg,sub){document.querySelectorAll('.toast').forEach(t=>t.remove());const d=document.createElement('div');d.className='toast';d.innerHTML='<span class="ok">'+ICON.check+'</span>'+msg+(sub?'<small>'+sub+'</small>':'');$('video').appendChild(d);S.toastEl=d;S.toastUntil=S.clock+2800;paint()}
+function seek(t,play){const prev=S.t;S.t=Math.max(0,Math.min(T,t));if(S.t>S.maxT)S.maxT=S.t;if(play!==undefined)S.playing=play;paintPlay();hideChip(true);renderScrub();renderRail();renderTopics();if(Math.abs(S.t-prev)>1)cut();paint()}
+function openTopic(i){
+  hideChip(true);S.playing=false;paintPlay();S.pausedAt=S.t;S.mode='read';S.topic=i;S.tab='summary';S.read.add(i);
+  renderRead();$('read').classList.add('open');$('chapters').classList.remove('open');paint();
+}
+function renderRead(){
+  const x=TOPICS[S.topic];const era=ERAS[x.era].n;const nxt=TOPICS[S.topic+1];const onScreen=S.pausedAt>=x.t-1&&(!nxt||S.pausedAt<nxt.t);
+  $('miniT').textContent='Paused at '+fmt(S.pausedAt);$('miniS').textContent=era+' · '+fmt(ERAS[x.era].s)+' – '+fmt((ERAS[x.era+1]||{s:T}).s);$('miniPb').style.width=pct(S.pausedAt)+'%';
+  const seg='<div class="seg">'+['summary','explore','sources'].map(k=>'<div class="'+(S.tab===k?'on':'')+'" data-tab="'+k+'">'+(S.tab===k?'<i></i>':'')+k[0].toUpperCase()+k.slice(1)+'</div>').join('')+'</div>';
+  const crumb='<div class="crumb">'+era+' '+ICON.chevr12+(S.tab==='summary'?' <b>'+fmt(x.t)+' in the film</b>':' '+x.title+' '+ICON.chevr12+' <b>'+(S.tab==='explore'?'Explore':'Sources')+'</b>')+'</div>';
+  const jump=p=>'<span class="jump tap" data-seek="'+p.t+'"><i></i>'+fmt(p.t)+'</span>';
+  const row=(p,ic)=>'<div class="place">'+(ic||ICON.pin16)+'<div class="nm"><b>'+p.n+'</b><span>'+p.s+'</span></div>'+jump(p)+'</div>';
+  let body='';
+  if(S.tab==='summary'){
+    body='<div class="sh"><div><h1>'+x.title+'</h1><p>'+x.sub+'</p></div>'+(onScreen?'<span class="tag">On screen now</span>':'<span class="tag" style="background:#e4e4e4">'+fmt(x.t)+' in film</span>')+'</div>'+seg+'<p class="para">'+x.summary+'</p><div class="lbl">Key evidence</div><div class="ev">'+x.ev.map(e=>'<span>'+e+'</span>').join('')+'</div>'
+    +'<div class="acc tap" data-tab="explore">'+ICON.pin+'Places<span class="sp"></span><span class="cnt">'+x.places.length+'</span>'+ICON.chev+'</div><div class="acc tap" data-tab="explore">'+ICON.people+'People<span class="sp"></span><span class="cnt">'+x.people.length+'</span>'+ICON.chev+'</div><div class="acc tap" data-tab="sources">'+ICON.doc+'Primary sources<span class="sp"></span><span class="cnt">'+x.sources.length+'</span>'+ICON.chev+'</div>';
+  }else if(S.tab==='explore'){
+    body=seg+'<div class="accopen"><div class="hd">'+ICON.pin+'Places<span class="sp"></span>'+ICON.chev+'</div>'+MAP+(x.places.length?x.places.map(p=>row(p)).join(''):'<div class="empty" style="padding:12px 14px">No mapped places for this topic yet.</div>')+'</div>'
+    +'<div class="accopen"><div class="hd">'+ICON.people+'People<span class="sp"></span>'+ICON.chev+'</div>'+(x.people.length?x.people.map(p=>row(p,ICON.people16)).join(''):'<div class="empty" style="padding:12px 14px">No people linked to this topic.</div>')+'</div>'
+    +'<div class="acc tap" data-tab="sources">'+ICON.doc+'Primary sources<span class="sp"></span><span class="cnt">'+x.sources.length+'</span>'+ICON.chev+'</div>';
+  }else{
+    body=seg+'<div class="accopen"><div class="hd">'+ICON.doc+'Primary sources<span class="sp"></span>'+ICON.chev+'</div>'+x.sources.map(s=>'<div class="srcrow">'+ICON.doc16+'<div><b>'+s.n+'</b><span>'+s.s+'</span></div></div>').join('')+'</div><p class="para" style="font-size:12px;color:#666">Sources open in a reader view. Citations copy as plain text.</p>';
+  }
+  $('sheetBody').innerHTML=crumb+body;
+  $('resumeLbl').textContent='Resume at '+fmt(S.pausedAt);
+  $('saveBtn').className='sq tap'+(S.saved.has(S.topic)?' saved':'');$('saveBtn').innerHTML=S.saved.has(S.topic)?ICON.bookfW:ICON.book;
+  $('sheet').scrollTop=0;
+}
+function resume(){S.mode='watch';$('read').classList.remove('open');seek(S.pausedAt,true);const n=S.read.size;toast('Resumed at '+fmt(S.pausedAt),n+' topic'+(n>1?'s':'')+' read')}
+function renderChapters(){
+  const cur=eraAt(S.t);
+  $('chList').innerHTML=ERAS.map((e,i)=>{const end=(ERAS[i+1]||{s:T}).s;const tp=TOPICS.map((x,j)=>({...x,j})).filter(x=>x.era===i);const rd=tp.filter(x=>S.read.has(x.j)).length;
+    const prog=Math.max(0,Math.min(1,(S.maxT-e.s)/(end-e.s)))*100;const st=i===cur?'<span class="st">Watching</span>':(S.maxT>=end?'<span class="st done">Watched</span>':'<span class="st off">Jump</span>');
+    return '<div class="ch tap'+(i===cur?' cur':'')+'" data-era="'+i+'"><div class="th">'+SCENE+'</div><div class="tx"><b>'+e.n+'<span>'+fmt(e.s)+' – '+fmt(end)+'</span></b><small>'+e.meta+' · '+tp.length+' topics'+(rd?' · '+rd+' read':'')+'</small><div class="pr"><i style="width:'+prog+'%"></i></div></div>'+st+'</div>'}).join('');
+  $('autoTog').className='tog tap'+(S.auto?'':' off');
+}
+document.addEventListener('click',ev=>{
+  const el=ev.target.closest('[data-topic],[data-era],[data-seek],[data-tab],#playBtn,#resumeBtn,#saveBtn,#miniPlay,#chapBtn,#chapters .dim,#autoTog,#scrub,#handle,.ctl button');
+  if(!el)return;
+  if(el.matches('.ctl button')){if(el.dataset.speed){S.speed=+el.dataset.speed;document.querySelectorAll('.ctl button[data-speed]').forEach(b=>b.classList.toggle('on',b===el))}else{location.href=location.pathname}return}
+  if(el.id==='playBtn'){S.playing=!S.playing;paintPlay();paint();return}
+  if(el.id==='resumeBtn'||el.id==='miniPlay'||el.id==='handle'){resume();return}
+  if(el.id==='saveBtn'){S.saved.has(S.topic)?S.saved.delete(S.topic):S.saved.add(S.topic);renderRead();return}
+  if(el.id==='chapBtn'){renderChapters();$('chapters').classList.add('open');return}
+  if(el.matches('#chapters .dim')){$('chapters').classList.remove('open');return}
+  if(el.id==='autoTog'){S.auto=!S.auto;renderChapters();if(!S.auto)hideChip();return}
+  if(el.dataset.tab){S.tab=el.dataset.tab;renderRead();return}
+  if(el.dataset.seek){S.mode='watch';$('read').classList.remove('open');seek(+el.dataset.seek,true);toast('Jumped to '+fmt(+el.dataset.seek),'from '+TOPICS[S.topic].title);return}
+  if(el.dataset.topic!==undefined){openTopic(+el.dataset.topic);return}
+  if(el.dataset.era!==undefined){$('chapters').classList.remove('open');seek(ERAS[+el.dataset.era].s,true);return}
+  if(el.id==='scrub'){const r=el.getBoundingClientRect();seek((ev.clientX-r.left)/r.width*T);return}
+});
+/* desktop: scale the 390x844 frame to the window height */
+function fit(){const w=innerWidth,h=innerHeight;let k=1;if(w>480&&!document.documentElement.classList.contains('still')){const side=w>820?334:0;k=Math.min(1,(h-40)/850,(w-side-40)/396)}document.documentElement.style.setProperty('--k',k.toFixed(4))}
+addEventListener('resize',fit);fit();
+/* ?state=watch|chip|read|explore|chapters|resume renders a fixed state (frozen until the first tap) */
+function applyState(name){
+  S.frozen=true;document.documentElement.classList.add('still');fit();
+  if(name==='watch'){seek(261,true)}
+  else if(name==='chip'){seek(272.4,true);showChip(3,3200)}
+  else if(name==='read'||name==='explore'){seek(272.4,true);openTopic(3);if(name==='explore'){S.tab='explore';renderRead()}}
+  else if(name==='chapters'){S.read.add(3);seek(273.2,true);renderChapters();$('chapters').classList.add('open')}
+  else if(name==='resume'){S.read.add(3);S.pausedAt=272.4;S.t=272.4;resume();S.t=273.2;S.maxT=273.2;renderTopics();paint()}
+  else S.frozen=false;
+  paint();
+}
+renderScrub();renderRail();renderTopics();paint();
+const st=new URLSearchParams(location.search).get('state');if(st)applyState(st);
+['pointerdown','keydown'].forEach(e=>addEventListener(e,()=>{S.frozen=false},{once:true,capture:true}));
+setInterval(tick,100);
+</script></body></html>

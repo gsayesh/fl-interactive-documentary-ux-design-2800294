@@ -1,0 +1,158 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:390px;height:844px;background:#fff;border-radius:46px;border:3px solid #1b1b1b;overflow:hidden;position:relative;font-family:Inter,system-ui,sans-serif;color:#111;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+.status{height:46px;flex:none;display:flex;justify-content:space-between;align-items:flex-end;padding:0 30px 8px;font-size:14px;font-weight:600}
+.status .ic{display:flex;gap:5px;align-items:center}
+.topbar{display:flex;gap:10px;padding:6px 16px 10px;flex:none}
+.city{background:#ececec;border-radius:14px;padding:0 14px;height:40px;display:flex;align-items:center;font-weight:700;font-size:16px;gap:8px;white-space:nowrap}
+.search{flex:1;background:#ececec;border-radius:14px;height:40px;display:flex;align-items:center;padding:0 14px;color:#7a7a7a;font-size:14px;gap:8px;white-space:nowrap}
+.video{margin:0 16px;height:216px;border-radius:18px;background:#555;position:relative;overflow:hidden;flex:none;color:#fff}
+.video svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.vtitle{position:absolute;left:16px;top:14px;font-size:19px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.bigplay{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:rgba(20,20,20,.85);display:flex;align-items:center;justify-content:center}
+.ctrls{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 11px;display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:500;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.ctrls .t{white-space:nowrap;letter-spacing:.2px}
+.scrub{flex:1;height:4px;background:rgba(255,255,255,.38);border-radius:2px;position:relative}
+.scrub .fill{height:100%;background:#fff;border-radius:2px}
+.scrub .mk{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #2b2b2b;transform:translateX(-50%)}
+.scrub .mk.cur{background:#F7993F;border-color:#fff;width:14px;height:14px;top:-5px;box-shadow:0 0 0 4px rgba(247,153,63,.4)}
+.scrub .tk{position:absolute;top:-2px;width:3px;height:8px;border-radius:2px;background:#F7993F;transform:translateX(-50%)}
+.scrub .head{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:#fff;transform:translateX(-50%)}
+.cc{border:1.5px solid #fff;border-radius:4px;font-size:9px;font-weight:700;padding:1px 4px}
+.chip{position:absolute;left:12px;bottom:48px;background:#fff;color:#111;border-radius:999px;padding:6px 14px 6px 6px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.chip .ring{width:28px;height:28px;flex:none}
+.chip small{display:block;font-size:10px;font-weight:500;color:#666}
+.rail{padding:16px 16px 0;flex:none;position:relative}
+.rail .line{position:absolute;left:36px;right:36px;top:24px;height:2.5px;background:#8a8a8a}
+.rail .nodes{display:flex;justify-content:space-between;position:relative}
+.rail .nd{display:flex;flex-direction:column;align-items:center;width:59px;gap:7px}
+.rail .dot{width:17px;height:17px;border-radius:50%;background:#fff;border:2.5px solid #666}
+.rail .nd.cur .dot{width:22px;height:22px;margin:-2.5px 0;border-color:#F7993F;background:#F7993F;box-shadow:0 0 0 3px #fff,0 0 0 5px #FFDDBE}
+.rail .lb{font-size:10.5px;color:#222;font-weight:500;white-space:nowrap}
+.rail .nd.cur .lb{background:#FFDDBE;border-radius:999px;padding:2px 6px;font-weight:700;margin-top:-2px}
+.rail .nd.done .dot{background:#8a8a8a;border-color:#8a8a8a}
+.hint{text-align:center;color:#8a8a8a;font-size:12px;font-weight:500;padding:8px 0 0}
+.sec{padding:14px 16px 0;flex:1;min-height:0}
+.sech{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.sech h3{font-size:15px;font-weight:700}
+.sech span{font-size:11.5px;color:#7a7a7a;font-weight:500}
+.topic{display:flex;align-items:center;gap:10px;height:50px;border-bottom:1px solid #e6e6e6;font-size:14px}
+.topic .ts{font-variant-numeric:tabular-nums;color:#555;font-size:12.5px;width:36px;font-weight:600}
+.topic .nm{flex:1;font-weight:500}
+.topic .bar{width:3px;height:30px;border-radius:2px;background:transparent;margin-left:-4px}
+.topic.now .bar{background:#F7993F}
+.topic.now .nm{font-weight:700}
+.topic .pill{font-size:10.5px;font-weight:700;background:#FFDDBE;padding:3px 8px;border-radius:999px}
+.topic .pill.read{background:#e6e6e6;color:#444}
+.topic .inf{width:26px;height:26px;border-radius:50%;border:1.5px solid #bdbdbd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#555}
+.upnext{margin-top:12px;background:#f3f3f3;border-radius:14px;padding:8px 10px 8px 8px;display:flex;align-items:center;gap:10px}
+.upnext .th{width:64px;height:42px;border-radius:8px;overflow:hidden;position:relative;flex:none;background:#777}
+.upnext .th svg{position:absolute;inset:0;width:100%;height:100%}
+.upnext .tx{flex:1;min-width:0}
+.upnext .tx small{display:block;font-size:10.5px;color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.upnext .tx b{display:block;font-size:13px;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upnext .tx span{display:block;font-size:11.5px;color:#555;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upnext .pv{font-size:11px;font-weight:700;border:1.5px solid #bbb;border-radius:999px;padding:5px 9px;background:#fff;white-space:nowrap}
+.nav{height:84px;flex:none;border-top:1px solid #e3e3e3;display:flex;padding:8px 12px 0;background:#fff}
+.nav div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:500;color:#333;padding:7px 0 4px;border-radius:14px}
+.nav div.on{background:#FFDDBE;font-weight:700}
+.home{position:absolute;bottom:9px;left:50%;width:134px;height:5px;background:#111;border-radius:3px;transform:translateX(-50%)}
+/* mini player + sheet */
+.mini{margin:4px 16px 0;height:74px;background:#1e1e1e;border-radius:16px;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 8px;color:#fff;flex:none}
+.mini .th{width:92px;height:58px;border-radius:10px;overflow:hidden;position:relative;flex:none;background:#555}
+.mini .th svg{position:absolute;inset:0;width:100%;height:100%}
+.mini .tx{flex:1;min-width:0}
+.mini .tx b{display:block;font-size:14px;font-weight:700}
+.mini .tx span{display:block;font-size:11.5px;color:#b5b5b5;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .pb{height:3px;background:#555;border-radius:2px;margin-top:7px;position:relative}
+.mini .pb i{position:absolute;left:0;top:0;height:100%;width:28.3%;background:#F7993F;border-radius:2px}
+.mini .play{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.sheet{margin-top:10px;background:#f3f3f3;border-radius:28px 28px 0 0;padding:8px 16px 0;flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.handle{width:44px;height:5px;background:#bdbdbd;border-radius:3px;margin:0 auto 10px}
+.crumb{font-size:12px;color:#7a7a7a;font-weight:500;display:flex;align-items:center;gap:6px}
+.crumb b{color:#333}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-top:4px}
+.sh h1{font-size:26px;font-weight:800;line-height:1.1;letter-spacing:-.3px}
+.sh p{font-size:13px;color:#555;margin-top:4px;font-weight:500}
+.tag{background:#FFDDBE;border-radius:999px;padding:5px 10px;font-size:11.5px;font-weight:700;white-space:nowrap;margin-top:4px}
+.seg{display:flex;background:#e2e2e2;border-radius:12px;padding:3px;margin-top:12px}
+.seg div{flex:1;text-align:center;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:10px;color:#666}
+.seg div.on{background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seg div.on i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#F7993F;margin-right:5px;vertical-align:1px}
+.para{font-size:13.5px;line-height:1.5;color:#333;margin-top:12px}
+.para a{color:#111;font-weight:700;border-bottom:2px solid #F7993F;text-decoration:none}
+.lbl{font-size:14px;font-weight:700;margin-top:14px}
+.ev{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.ev span{background:#e4e4e4;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:500}
+.acc{background:#fff;border:1.5px solid #d9d9d9;border-radius:14px;padding:0 14px;height:52px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;margin-top:8px}
+.acc .sp{flex:1}
+.acc .cnt{font-size:11.5px;color:#7a7a7a;font-weight:600}
+.accopen{background:#fff;border:1.5px solid #d9d9d9;border-radius:14px;margin-top:8px;overflow:hidden}
+.accopen .hd{padding:0 14px;height:48px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;border-bottom:1px solid #ececec}
+.accopen .hd .sp{flex:1}
+.place{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #f0f0f0;font-size:13px}
+.place:last-child{border-bottom:0}
+.place .nm{flex:1;min-width:0}
+.place .nm b{display:block;font-weight:600}
+.place .nm span{font-size:11.5px;color:#777}
+.jump{display:inline-flex;align-items:center;gap:4px;border:1.5px solid #ccc;border-radius:999px;padding:4px 8px 4px 6px;font-size:11px;font-weight:700;white-space:nowrap;background:#fafafa}
+.jump i{width:0;height:0;border-left:7px solid #111;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.map{height:96px;background:#e3e3e3;position:relative;overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map .cap{position:absolute;left:10px;bottom:7px;font-size:11px;font-weight:700;background:#fff;padding:2px 7px;border-radius:999px}
+.footer{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:10px}
+.resume{flex:1;height:54px;background:#111;color:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:16px}
+.resume small{font-weight:500;opacity:.75;font-size:12px}
+.sq{width:54px;height:54px;border-radius:16px;border:1.5px solid #cfcfcf;background:#fff;display:flex;align-items:center;justify-content:center}
+.fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(rgba(243,243,243,0),#f3f3f3 55%);pointer-events:none}
+.toast{position:absolute;left:12px;right:12px;bottom:50px;background:#fff;color:#111;border-radius:12px;padding:9px 12px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.toast .ok{width:20px;height:20px;border-radius:50%;background:#F7993F;display:flex;align-items:center;justify-content:center;flex:none}
+.toast small{font-weight:500;color:#666;margin-left:auto}
+/* chapters */
+.chh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.chh h2{font-size:20px;font-weight:800}
+.tog{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#444}
+.tog i{width:34px;height:20px;border-radius:999px;background:#F7993F;position:relative;display:inline-block}
+.tog i:after{content:"";position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.ch{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:14px;margin:0 -4px}
+.ch .th{width:50px;height:34px;border-radius:8px;background:#cfcfcf;position:relative;overflow:hidden;flex:none}
+.ch .th svg{position:absolute;inset:0;width:100%;height:100%}
+.ch .tx{flex:1;min-width:0}
+.ch .tx b{font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.ch .tx b span{font-size:11px;color:#777;font-weight:600;font-variant-numeric:tabular-nums}
+.ch .tx small{display:block;font-size:11px;color:#777;margin-top:1px}
+.ch .pr{height:3px;background:#ddd;border-radius:2px;margin-top:5px;position:relative}
+.ch .pr i{position:absolute;left:0;top:0;height:100%;background:#8a8a8a;border-radius:2px}
+.ch.cur{background:#fff;border:1.5px solid #F7993F}
+.ch.cur .pr i{background:#F7993F}
+.ch .st{font-size:10.5px;font-weight:700;background:#FFDDBE;padding:3px 8px;border-radius:999px}
+.ch .st.done{background:#e4e4e4;color:#444}
+.ch .st.off{background:transparent;color:#999;border:1.5px solid #ddd}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.22)}
+body{width:390px;height:844px;background:#fff;overflow:hidden}.phone{border:0;border-radius:0}</style></head><body><div class="phone"><div class="status"><span>9:41</span><span class="ic">
+<svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx=".8" fill="#111"/><rect x="4.5" y="5.5" width="3" height="6.5" rx=".8" fill="#111"/><rect x="9" y="3" width="3" height="9" rx=".8" fill="#111"/><rect x="13.5" y="0" width="3" height="12" rx=".8" fill="#111"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5L1 4.5a9.6 9.6 0 0 1 14 0z" fill="#111"/></svg>
+<svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="#111"/><rect x="2" y="2" width="18" height="8" rx="1.8" fill="#111"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#111"/></svg></span></div><div class="topbar"><div class="city">Nashik <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="search"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#7a7a7a" stroke-width="2"/><path d="M15 15l5 5" stroke="#7a7a7a" stroke-width="2" stroke-linecap="round"/></svg>Search this city’s past</div></div><div class="video"><svg class="scene" viewBox="0 0 358 216" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e6e6e"/><stop offset="1" stop-color="#a3a3a3"/></linearGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d7d7d"/><stop offset="1" stop-color="#4f4f4f"/></linearGradient></defs>
+<rect width="358" height="216" fill="url(#sky)"/>
+<path d="M0 118 L40 96 L80 108 L120 84 L160 100 L200 92 L240 104 L280 90 L320 100 L358 92 L358 150 L0 150Z" fill="#7b7b7b"/>
+<path d="M0 132 L50 118 L90 128 L140 112 L190 126 L230 118 L270 128 L300 122 L358 130 L358 160 L0 160Z" fill="#5f5f5f"/>
+<g fill="#383838"><path d="M258 150 L258 92 L266 78 L268 60 L272 50 L274 42 L277 38 L280 42 L282 50 L286 60 L288 78 L296 92 L296 150Z"/><rect x="236" y="118" width="20" height="32" rx="2"/><path d="M234 118 L246 102 L258 118Z"/><rect x="302" y="112" width="28" height="38" rx="2"/><path d="M300 112 L316 94 L332 112Z"/></g>
+<g fill="#4a4a4a"><rect x="220" y="150" width="138" height="6"/><rect x="214" y="156" width="144" height="6"/><rect x="208" y="162" width="150" height="6"/><rect x="202" y="168" width="156" height="6"/></g>
+<rect y="174" width="358" height="42" fill="url(#wat)"/>
+<g stroke="#9a9a9a" stroke-width="1" opacity=".5"><line x1="20" y1="184" x2="120" y2="184"/><line x1="60" y1="196" x2="200" y2="196"/><line x1="150" y1="206" x2="320" y2="206"/></g>
+<g fill="#454545"><circle cx="34" cy="150" r="18"/><circle cx="60" cy="156" r="14"/><circle cx="14" cy="160" r="12"/><rect x="31" y="160" width="6" height="16"/></g>
+</svg><div class="vtitle">Nashik Through Time</div><div class="chip"><svg class="ring" viewBox="0 0 28 28"><circle cx="14" cy="14" r="12" fill="none" stroke="#e2e2e2" stroke-width="3"/><circle cx="14" cy="14" r="12" fill="none" stroke="#F7993F" stroke-width="3" stroke-dasharray="75.4" stroke-dashoffset="22" stroke-linecap="round" transform="rotate(-90 14 14)"/><path d="M14 20s4.2-4.3 4.2-7.5a4.2 4.2 0 0 0-8.4 0C9.8 15.7 14 20 14 20z" fill="#111"/></svg><div>Pandavleni Caves<small>Tap to pause &amp; read more</small></div><svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" fill="none" stroke="#555" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="ctrls"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"/></svg><span class="t">4:32 / 16:00</span><div class="scrub"><div class="fill" style="width:28.3%"></div><i class="mk" style="left:0%"></i><i class="mk cur" style="left:18.75%"></i><i class="mk" style="left:41.7%"></i><i class="mk" style="left:59.4%"></i><i class="mk" style="left:77.1%"></i><i class="mk" style="left:92.7%"></i><i class="tk" style="left:19.3%"></i><i class="tk" style="left:28.3%"></i><i class="tk" style="left:38.5%"></i><i class="head" style="left:28.3%"></i></div><span class="cc">CC</span><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div></div><div class="rail"><div class="line"></div><div class="nodes"><div class="nd done"><div class="dot"></div><div class="lb">Ancient</div></div><div class="nd cur"><div class="dot"></div><div class="lb">Satavahana</div></div><div class="nd"><div class="dot"></div><div class="lb">Medieval</div></div><div class="nd"><div class="dot"></div><div class="lb">Maratha</div></div><div class="nd"><div class="dot"></div><div class="lb">British</div></div><div class="nd"><div class="dot"></div><div class="lb">Today</div></div></div></div><div class="hint">Film keeps playing · chip slides away after 8 s</div><div class="sec"><div class="sech"><h3>In this chapter · Satavahana</h3><span>c. 2nd c. BCE – 3rd c. CE</span></div><div class="topic"><i class="bar"></i><span class="ts">3:05</span><span class="nm">Gautamiputra Satakarni</span><span class="inf">i</span></div><div class="topic now"><i class="bar"></i><span class="ts">4:32</span><span class="nm">Pandavleni Caves</span><span class="pill">Now</span><span class="inf">i</span></div><div class="topic"><i class="bar"></i><span class="ts">6:10</span><span class="nm">The trade road to Paithan</span><span class="inf">i</span></div><div class="upnext"><div class="th"><svg class="scene" viewBox="0 0 358 216" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e6e6e"/><stop offset="1" stop-color="#a3a3a3"/></linearGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d7d7d"/><stop offset="1" stop-color="#4f4f4f"/></linearGradient></defs>
+<rect width="358" height="216" fill="url(#sky)"/>
+<path d="M0 118 L40 96 L80 108 L120 84 L160 100 L200 92 L240 104 L280 90 L320 100 L358 92 L358 150 L0 150Z" fill="#7b7b7b"/>
+<path d="M0 132 L50 118 L90 128 L140 112 L190 126 L230 118 L270 128 L300 122 L358 130 L358 160 L0 160Z" fill="#5f5f5f"/>
+<g fill="#383838"><path d="M258 150 L258 92 L266 78 L268 60 L272 50 L274 42 L277 38 L280 42 L282 50 L286 60 L288 78 L296 92 L296 150Z"/><rect x="236" y="118" width="20" height="32" rx="2"/><path d="M234 118 L246 102 L258 118Z"/><rect x="302" y="112" width="28" height="38" rx="2"/><path d="M300 112 L316 94 L332 112Z"/></g>
+<g fill="#4a4a4a"><rect x="220" y="150" width="138" height="6"/><rect x="214" y="156" width="144" height="6"/><rect x="208" y="162" width="150" height="6"/><rect x="202" y="168" width="156" height="6"/></g>
+<rect y="174" width="358" height="42" fill="url(#wat)"/>
+<g stroke="#9a9a9a" stroke-width="1" opacity=".5"><line x1="20" y1="184" x2="120" y2="184"/><line x1="60" y1="196" x2="200" y2="196"/><line x1="150" y1="206" x2="320" y2="206"/></g>
+<g fill="#454545"><circle cx="34" cy="150" r="18"/><circle cx="60" cy="156" r="14"/><circle cx="14" cy="160" r="12"/><rect x="31" y="160" width="6" height="16"/></g>
+</svg></div><div class="tx"><small>After this</small><b>6:10 · Trade road to Paithan</b><span>Coins and the Deccan route · 1 min</span></div><span class="pv">Preview</span></div></div><div class="nav"><div class="on"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18" stroke="#111" stroke-width="2"/><circle cx="6" cy="12" r="2.6" fill="#111"/><circle cx="12" cy="12" r="2.6" fill="#fff" stroke="#111" stroke-width="2"/><circle cx="18" cy="12" r="2.6" fill="#fff" stroke="#111" stroke-width="2"/></svg>Timeline</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s7-7.2 7-12.5A7 7 0 0 0 5 9.5C5 14.8 12 22 12 22z" fill="#111"/><circle cx="12" cy="9.5" r="2.6" fill="#fff"/></svg>Map</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="#111" stroke-width="2"/><path d="M8 10h8M8 14h5" stroke="#111" stroke-width="2" stroke-linecap="round"/></svg>Stories</div><div class=""><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>Saved</div></div><div class="home"></div></div></body></html>
